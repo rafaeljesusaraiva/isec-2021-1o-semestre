@@ -1,0 +1,43 @@
+
+- VirtualBox (+ Extension Pack)
+- Debian 10.6 (Sharepoint - ".vbox")
+- PuTTY (Terminal - SSH)
+- WinSCP (Terminal/Ficheiros - SSH/SFTP)
+
+CTRL + ALT + F1  (terminal 1)
+CTRL + ALT + F2  (terminal 2)
+...
+
+- Linha de Comandos
+
+  myself @ so2021min : ~ $ _
+   USER      HOST     DIR
+
+  $ id
+  $ whoami
+  $ hostname
+  $ pwd       (print working directory)
+  $ clear
+  $ exit
+
+  COMANDO   -OPÇÕES   ARGUMENTOS
+
+  $ man cp
+
+    SPACE - Page Down
+    B     - Page Up
+    ENTER - Line Down
+    Q     - Quit
+
+    1 - Comandos
+    2 - API do Unix (programação)
+    3 - Bibliotecas 'C'
+    4 - ...
+
+  $ man -k printf 
+  printf (1)       - format and print data
+  printf (3)       - formatted output conversion
+  ...
+
+  $ man 3 printf
+
