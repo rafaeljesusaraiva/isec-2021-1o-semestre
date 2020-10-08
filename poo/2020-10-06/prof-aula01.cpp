@@ -2,6 +2,7 @@
 //
 
 #include <iostream>  
+
 void f1e1a() {
     char nome[50];
     int idade;
@@ -17,20 +18,20 @@ void f1e1a() {
 
 void exemplo2() {
     std::cout << "Introduza dois numeros" << std::endl; //apresenta frase
-                                    //envia para saída standard e muda de linha
-    int v1, v2; //declaração onde se usa
+                                    //envia para saï¿½da standard e muda de linha
+    int v1, v2; //declaraï¿½ï¿½o onde se usa
     std::cin >> v1 >> v2;      
     std::cout << "soma de " << v1 << " com " << v2 << " da " << v1 + v2 
               << std::endl;
 }
 
-//using std::cin;  //também podia ser assim
+//using std::cin;  //tambï¿½m podia ser assim
 //using std::cout;
 //using std::endl;
 using namespace std; //para poder omitir o namespace dos objetos
 void exemplo3() {
     cout << "Introduza dois numeros" << endl; 
-    int v1, v2; //declaração onde se usa
+    int v1, v2; //declaraï¿½ï¿½o onde se usa
     cin >> v1 >> v2;
     cout << "soma de " << v1 << " com " << v2 << " da " << v1 + v2 << endl;
 }
@@ -49,17 +50,17 @@ void f1e2a() {
 void exemplo4() {
     string s1; //string vazia
     cout << "s1:" << s1 << endl;
-    string s2 = s1; //s2 é uma cópia de s1
+    string s2 = s1; //s2 ï¿½ uma cï¿½pia de s1
     cout << "s2:" << s2 << endl;
-    string s3 = "Bom dia"; //s3 é uma cópia da string literal
+    string s3 = "Bom dia"; //s3 ï¿½ uma cï¿½pia da string literal
     cout << "s3:" << s3 << endl;
-    string s4(10, 'c'); // s4 é cccccccccc
+    string s4(10, 'c'); // s4 ï¿½ cccccccccc
     cout << "s4:" << s4 << endl;
 }
 //using std::string;
 void f1e3a() {
     cout << "nome: " << endl;
-    string nome; //sequencia de carateres de tamanho variável
+    string nome; //sequencia de carateres de tamanho variï¿½vel
     cin >> nome;
     cout << "idade: " << endl;
     int idade;
@@ -108,7 +109,7 @@ void exemplo8() {
 void exemplo9() {
     cout << "nome: " << endl;
     string nome;
-    getline(cin, nome); //lê até oa \n
+    getline(cin, nome); //lï¿½ atï¿½ oa \n
     int idade;
     cout << "idade: " << endl;
     cin >> idade;
