@@ -1,0 +1,3 @@
+﻿  clienteUDPv1_basico.c
+C:\Users\Rafael Jesus Saraiva\Desktop\IRC\Exercicio_UDP_1\Cliente\clienteUDPv1_basico.c(28,7): warning C4101: 'buffer': unreferenced local variable
+  Cliente.vcxproj -> C:\Users\Rafael Jesus Saraiva\Desktop\IRC\Exercicio_UDP_1\Debug\Cliente.exe
