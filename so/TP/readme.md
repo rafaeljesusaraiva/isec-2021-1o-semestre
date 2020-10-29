@@ -14,9 +14,9 @@ Sistema de gestão de campeonatos em linguagem C para a entrega do trabalho prá
 - [ ] Planear e definir as estruturas de dados responsáveis por gerir as definições de funcionamento no árbitro e no cliente. Definir os vários header files com constantes simbólicas que registem os valores por omissão comuns e específicos do cliente e servidor
 bem como as estruturas de dados relevantes.
 - [ ] Obter a “duração do campeonato” e o “tempo de espera”, aquando da execução do árbitro, através da leitura dos argumentos de linha de comandos. Sugestão: use as funções `getopt()` e `getsubopt()`.
-- [ ] Implementar um jogo respeitando as características referidas no enunciado, exceto o que se refere ao tratamento de sinais, que ainda não terá que existir. Bastará algo muito simples desde que siga a lógica dos jogos a usar com o sistema CHAMPION.
+- [x] Implementar um jogo respeitando as características referidas no enunciado, exceto o que se refere ao tratamento de sinais, que ainda não terá que existir. Bastará algo muito simples desde que siga a lógica dos jogos a usar com o sistema CHAMPION.
 - [ ] Desenvolver a lógica de leitura das variáveis de ambiente GAMEDIR e MAXPLAYER pelo árbitro, refletindo-se nas estruturas de dados mencionadas no ponto anterior. Sugestão: use a função `getenv()`.
-- [ ] Desenvolver e entregar um makefile que possua os targets de compilação “all” (compilação de todos os programas), “cliente” (compilação do programa cliente), “árbitro” (compilação do programa servidor), “jogo” (compilação do programa jogo proposto) e “clean” (eliminação de todos os ficheiros temporários de apoio à compilação e dos executáveis).
+- [x] Desenvolver e entregar um makefile que possua os targets de compilação “all” (compilação de todos os programas), “cliente” (compilação do programa cliente), “árbitro” (compilação do programa servidor), “jogo” (compilação do programa jogo proposto) e “clean” (eliminação de todos os ficheiros temporários de apoio à compilação e dos executáveis).
 
 ### Meta 2 - `Domingo, 13 de Dezembro, 2020`
 - [ ] Acrescentar ao jogo já implementado na meta 1 a parte do término aquando da receção do sinal SIGUSR1 e a disponibilização do resultado através do exit status.
