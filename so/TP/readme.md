@@ -11,11 +11,11 @@ Sistema de gestão de campeonatos em linguagem C para a entrega do trabalho prá
 - Entrega de um relatório. O relatório compreenderá o conteúdo que for relevante para justificar o trabalho feito, deverá ser da exclusiva autoria dos membros do grupo. Caso venha a ser divulgado entretanto um guia de elaboração do relatório, então este deverá seguir as indicações dadas
 
 ### Meta 1 - `Domingo, 8 de Novembro, 2020`
-- [ ] Planear e definir as estruturas de dados responsáveis por gerir as definições de funcionamento no árbitro e no cliente. Definir os vários header files com constantes simbólicas que registem os valores por omissão comuns e específicos do cliente e servidor
+- [x] Planear e definir as estruturas de dados responsáveis por gerir as definições de funcionamento no árbitro e no cliente. Definir os vários header files com constantes simbólicas que registem os valores por omissão comuns e específicos do cliente e servidor
 bem como as estruturas de dados relevantes.
-- [ ] Obter a “duração do campeonato” e o “tempo de espera”, aquando da execução do árbitro, através da leitura dos argumentos de linha de comandos. Sugestão: use as funções `getopt()` e `getsubopt()`.
+- [x] Obter a “duração do campeonato” e o “tempo de espera”, aquando da execução do árbitro, através da leitura dos argumentos de linha de comandos. Sugestão: use as funções `getopt()` e `getsubopt()`.
 - [x] Implementar um jogo respeitando as características referidas no enunciado, exceto o que se refere ao tratamento de sinais, que ainda não terá que existir. Bastará algo muito simples desde que siga a lógica dos jogos a usar com o sistema CHAMPION.
-- [ ] Desenvolver a lógica de leitura das variáveis de ambiente GAMEDIR e MAXPLAYER pelo árbitro, refletindo-se nas estruturas de dados mencionadas no ponto anterior. Sugestão: use a função `getenv()`.
+- [x] Desenvolver a lógica de leitura das variáveis de ambiente GAMEDIR e MAXPLAYER pelo árbitro, refletindo-se nas estruturas de dados mencionadas no ponto anterior. Sugestão: use a função `getenv()`.
 - [x] Desenvolver e entregar um makefile que possua os targets de compilação “all” (compilação de todos os programas), “cliente” (compilação do programa cliente), “árbitro” (compilação do programa servidor), “jogo” (compilação do programa jogo proposto) e “clean” (eliminação de todos os ficheiros temporários de apoio à compilação e dos executáveis).
 
 ### Meta 2 - `Domingo, 13 de Dezembro, 2020`

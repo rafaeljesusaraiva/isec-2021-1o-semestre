@@ -27,7 +27,6 @@ int main() {
             // Dar pontos de acordo com a proximidade da adivinha ?
         else {
             printf("\tResposta Correta! Ganhou 10 pontos!\n");
-            // Adicionar Pontos
             pontos += 10;
         }
     }

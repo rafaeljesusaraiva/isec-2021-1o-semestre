@@ -20,7 +20,7 @@ E_LBLUE_INFO = '[\033[1;34mINFO\033[0m] '
 
 # CHEATSHEET - Compilador
 	# $<   Variável automática "Target"
-	# $@   Variável automática "Source"
+	# $@   Variável automática "Source" (nome da regra)
 	# $*   Variável inserida no nome da regra, indicada por *
 # CHEATSHEET - Makefile
 	# $(VAR)		Usar variável "VAR"
