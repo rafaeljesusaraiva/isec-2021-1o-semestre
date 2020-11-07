@@ -3,12 +3,12 @@
 
 #include <unistd.h>
 
-struct jogador {
+typedef struct Jogador_Info {
     int id;
     char nome[100];
     char jogo[50];
     int pontuacao;
-};
+} Jogador;
 
 // struct estruturas {
 //     /* data */

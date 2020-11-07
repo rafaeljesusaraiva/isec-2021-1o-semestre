@@ -1,7 +1,7 @@
-#ifndef ESTRUTURAS_H
-#define ESTRUTURAS_H
+#ifndef CONSTANTES_H
+#define CONSTANTES_H
 
 // VARIÁVEIS CONSTANTES PARA O CLIENTE
 #define NONAME "ITS_ME_MARIO"   // Caso o jogador não insira nome
 
-#endif // ESTRUTURAS_H
+#endif // CONSTANTES_H

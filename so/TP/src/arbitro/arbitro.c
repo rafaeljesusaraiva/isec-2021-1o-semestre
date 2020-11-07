@@ -24,6 +24,8 @@ int main(int argc, char *argv[]) {
     if (int_MAXPLAYERS >= MAXDEFINEDPLAYERS || int_MAXPLAYERS <= MINPLAYERS)
 		return ERRO_MAXPLAYERS_EXCEDIDO;
 
+    Jogador oi;
+
 	// OBTER ARGUMENTOS
     int opt;
     while((opt = getopt(argc, argv, "t:e:")) != -1) {  

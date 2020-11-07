@@ -1,8 +1,8 @@
 CC = gcc
-DISTDIR = dist
-OBJDIR = dist/objdir
-SRCDIR = src
-# FLAGS=-D DEBUG
+DISTDIR = dist			# Diretoria dos programas compilados (executáveis)
+OBJDIR = dist/objdir	# Diretoria dos objetos
+SRCDIR = src			# Diretoria dos ficheiros fonte
+# FLAGS=-D DEBUG		# Variáveis para debug
 
 # ECHO CORES
 E_RED = '\033[0;31m'
@@ -30,21 +30,21 @@ E_LBLUE_INFO = '[\033[1;34mINFO\033[0m] '
 # Compila todos os targets
 all: cliente arbitro
 
-# Compila o cliente
+# Compila o cliente.c
 cliente: cliente.o
-	$(CC) $(OBJDIR)/$@.o -o $(DISTDIR)/cliente
+	$(CC) $(OBJDIR)/cliente.o -o $(DISTDIR)/cliente
 	@echo $(E_LBLUE_INFO)"Executável do cliente criado."
 
-cliente.o: $(SRCDIR)/cliente/* directorias
+cliente.o: $(SRCDIR)/cliente/*.c directorias
 	$(CC) -c $(FLAGS) $< -o $(OBJDIR)/$@
 	@echo $(E_LBLUE_INFO)"Objeto do cliente criado."
 
-# Compila o árbitro
+# Compila o árbitro.c
 arbitro: arbitro.o
-	$(CC) $(OBJDIR)/$@.o -o $(DISTDIR)/arbitro
+	$(CC) $(OBJDIR)/arbitro.o -o $(DISTDIR)/arbitro
 	@echo $(E_LBLUE_INFO)"Executável do árbitro criado."
 
-arbitro.o: $(SRCDIR)/arbitro/* directorias
+arbitro.o: $(SRCDIR)/arbitro/*.c directorias
 	$(CC) -c $(FLAGS) $< -o $(OBJDIR)/$@
 	@echo $(E_LBLUE_INFO)"Objeto do árbitro criado."
 

@@ -1,5 +1,5 @@
-#ifndef ESTRUTURAS_H
-#define ESTRUTURAS_H
+#ifndef CONSTANTES_H
+#define CONSTANTES_H
 
 // CONSTANTES DE INFORMAÇÃO (OU VERIFICAÇÂO)
 #define MINPLAYERS 2
@@ -11,4 +11,4 @@
 #define ERRO_FALTA_ENV 11       // Arbitro saiu por nao haver(em) variaveis de ambiente
 #define ERRO_MAXPLAYERS_EXCEDIDO 12 // Arbitro saiu por var. amb. exceder limite
 
-#endif // ESTRUTURAS_H
+#endif // CONSTANTES_H
