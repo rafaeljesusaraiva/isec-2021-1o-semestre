@@ -9,8 +9,8 @@ int main(int argc, char *argv[]) {
 
     // ./arbitro -t [tempo campeonato] -e [tempo espera]
 
-    // export GAMEDIR="dist/"
-    // export MAXPLAYERS=25
+    // (stor) export GAMEDIR="dist/"
+    // (stor) export MAXPLAYERS=25
 
     // OBTER VARIAVEIS
     char *env_GAMEDIR = getenv("GAMEDIR");
