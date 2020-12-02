@@ -8,6 +8,7 @@
 // CONSTANTES DE SAIDA
 #define FIM_BOM 0               // Arbitro saiu corretamente
 // [10-20] Sao saidas (de erro) iniciais do arbitro
+#define ERRO_ARG 10
 #define ERRO_FALTA_ENV 11       // Arbitro saiu por nao haver(em) variaveis de ambiente
 #define ERRO_MAXPLAYERS_EXCEDIDO 12 // Arbitro saiu por var. amb. exceder limite
 

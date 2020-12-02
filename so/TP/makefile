@@ -1,8 +1,12 @@
 CC = gcc
-DISTDIR = dist			# Diretoria dos programas compilados (executáveis)
-OBJDIR = dist/objdir	# Diretoria dos objetos
-SRCDIR = src			# Diretoria dos ficheiros fonte
-# FLAGS=-D DEBUG		# Variáveis para debug
+# Diretoria dos programas compilados (executáveis)
+DISTDIR = dist
+# Diretoria dos objetos
+OBJDIR = dist/objdir
+# Diretoria dos ficheiros fonte
+SRCDIR = src
+# Variáveis para debug
+# FLAGS=-D DEBUG
 
 # ECHO CORES
 E_RED = '\033[0;31m'
@@ -35,7 +39,7 @@ cliente: cliente.o
 	$(CC) $(OBJDIR)/cliente.o -o $(DISTDIR)/cliente
 	@echo $(E_LBLUE_INFO)"Executável do cliente criado."
 
-cliente.o: $(SRCDIR)/cliente/*.c directorias
+cliente.o: $(SRCDIR)/cliente/* directorias
 	$(CC) -c $(FLAGS) $< -o $(OBJDIR)/$@
 	@echo $(E_LBLUE_INFO)"Objeto do cliente criado."
 

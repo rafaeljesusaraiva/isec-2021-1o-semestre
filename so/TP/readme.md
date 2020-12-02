@@ -19,7 +19,7 @@ bem como as estruturas de dados relevantes.
 - [x] Desenvolver e entregar um makefile que possua os targets de compilação “all” (compilação de todos os programas), “cliente” (compilação do programa cliente), “árbitro” (compilação do programa servidor), “jogo” (compilação do programa jogo proposto) e “clean” (eliminação de todos os ficheiros temporários de apoio à compilação e dos executáveis).
 
 ### Meta 2 - `Domingo, 13 de Dezembro, 2020`
-- [ ] Acrescentar ao jogo já implementado na meta 1 a parte do término aquando da receção do sinal SIGUSR1 e a disponibilização do resultado através do exit status.
+- [x] Acrescentar ao jogo já implementado na meta 1 a parte do término aquando da receção do sinal SIGUSR1 e a disponibilização do resultado através do exit status.
 - [ ] Implementar toda a lógica de comunicação entre os clientes e o árbitro através do mecanismo de named pipes.
 - [ ] Implementar os comandos suportados pelo cliente: `#mygame` e `#quit`.
 - [ ] Iniciar o desenvolvimento da leitura de comandos de administração do árbitro implementando a leitura e validação dos comandos e respetivos parâmetros, incluindo a implementação completa dos comandos `players`, `games`, `k` e `exit`.
