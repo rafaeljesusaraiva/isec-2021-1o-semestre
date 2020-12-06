@@ -1,14 +1,20 @@
 #ifndef ESTRUTURAS_H
 #define ESTRUTURAS_H
 
+#include "utils.h"
 #include <unistd.h>
 
-typedef struct Jogador_Info {
-    int id;
-    char nome[100];
-    char jogo[50];
+typedef struct {
+    int pid;
+    char nome[30];
+    char jogo[10];
     int pontuacao;
-} Jogador;
+    char comando[30];
+    int fim; 
+    // -1 => falta nome
+    // 0  => jogo decorre
+    // 1  => jogo acaba
+} Comm_cli;
 
 // struct estruturas {
 //     /* data */
