@@ -15,7 +15,7 @@ void sair(int s) {
     exit(pontos);
 }
 
-void main() {
+int main() {
     srand(time(NULL)); // Iniciar variabilidade para limMax e limMin
     int limMax, limMin, num, input;
 

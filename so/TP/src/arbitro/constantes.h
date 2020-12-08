@@ -12,5 +12,6 @@
 #define ERRO_FALTA_ENV 11       // Arbitro saiu por nao haver(em) variaveis de ambiente
 #define ERRO_MAXPLAYERS_EXCEDIDO 12 // Arbitro saiu por var. amb. exceder limite
 #define ERRO_FIFO_EXISTE 13
+#define ERRO_MALLOC_JOGOS 14       // Arbitro saiu por erro de memoria 
 
 #endif // CONSTANTES_H

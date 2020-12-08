@@ -20,9 +20,9 @@ bem como as estruturas de dados relevantes.
 
 ### Meta 2 - `Domingo, 13 de Dezembro, 2020`
 - [x] Acrescentar ao jogo já implementado na meta 1 a parte do término aquando da receção do sinal SIGUSR1 e a disponibilização do resultado através do exit status.
-- [ ] Implementar toda a lógica de comunicação entre os clientes e o árbitro através do mecanismo de named pipes.
+- [x] Implementar toda a lógica de comunicação entre os clientes e o árbitro através do mecanismo de named pipes.
 - [x] Implementar os comandos suportados pelo cliente: `#mygame` e `#quit`.
-- [ ] Iniciar o desenvolvimento da leitura de comandos de administração do árbitro implementando a leitura e validação dos comandos e respetivos parâmetros, incluindo a implementação completa dos comandos `players`, `games`, `k` e `exit`.
+- [x] Iniciar o desenvolvimento da leitura de comandos de administração do árbitro implementando a leitura e validação dos comandos e respetivos parâmetros, incluindo a implementação completa dos comandos `players`, `games`, `k` e `exit`.
 
 ### Meta 3 - `Domingo, 24 de Janeiro, 2021`
 - [ ] Todos os requisitos expostos no enunciado.

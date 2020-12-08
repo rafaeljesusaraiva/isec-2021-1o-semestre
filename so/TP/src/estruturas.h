@@ -4,10 +4,11 @@
 #include "utils.h"
 #include <unistd.h>
 
+
 typedef struct {
     int pid;
     char nome[30];
-    char jogo[10];
+    char jogo[1024];
     int pontuacao;
     char comando[30];
     int fim; 
@@ -16,6 +17,15 @@ typedef struct {
     // 1  => jogo acaba
 } Comm_cli;
 
+typedef struct jogad {
+    Comm_cli cli;
+    struct jogad *seg;
+} Jogadores;
+
+typedef struct jogos {
+    char nome[1024];
+    struct jogos *seg;
+} Jogos;
 // struct estruturas {
 //     /* data */
 // };

@@ -6,7 +6,7 @@ OBJDIR = dist/objdir
 # Diretoria dos ficheiros fonte
 SRCDIR = src
 # Variáveis para debug
-FLAGS=-D DEBUG
+# FLAGS=-D DEBUG
 
 # ECHO CORES
 E_RED = '\033[0;31m'
@@ -44,13 +44,17 @@ cliente.o: $(SRCDIR)/cliente/* directorias
 	@echo $(E_LBLUE_INFO)"Objeto do cliente criado."
 
 # Compila o árbitro.c
-arbitro: arbitro.o
-	$(CC) $(OBJDIR)/arbitro.o -o $(DISTDIR)/arbitro
+arbitro: arbitro.o helper-arbitro.o
+	$(CC) $(OBJDIR)/arbitro.o $(OBJDIR)/helper-arbitro.o -o $(DISTDIR)/arbitro
 	@echo $(E_LBLUE_INFO)"Executável do árbitro criado."
 
-arbitro.o: $(SRCDIR)/arbitro/*.c directorias
+arbitro.o: $(SRCDIR)/arbitro/arbitro.c directorias
 	$(CC) -c $(FLAGS) $< -o $(OBJDIR)/$@
 	@echo $(E_LBLUE_INFO)"Objeto do árbitro criado."
+
+helper-arbitro.o: $(SRCDIR)/arbitro/helper-arbitro.c directorias
+	$(CC) -c $(FLAGS) $< -o $(OBJDIR)/$@
+	@echo $(E_LBLUE_INFO)"Objeto do helper árbitro criado."
 
 # Compila o jogo
 jogo-%: jogo-%.o
