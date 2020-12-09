@@ -15,7 +15,7 @@
 #include <time.h>
 
 
-void MUNDO::insere_territorios(string tipo, int num) {
+void Mundo::insere_territorios(string tipo, int num) {
     bool existe = false;
     int resistencia = 100, cria_produto = 1, cria_ouro = 1;
     for (int i = 0; i < num; i++) {
@@ -24,7 +24,7 @@ void MUNDO::insere_territorios(string tipo, int num) {
                 existe = true;
                 enumeracao[j]++;
                 string nome = tipo + to_string(enumeracao[j]);
-                TERRITORIO novo_territorio(nome, resistencia, cria_produto, cria_ouro);
+                Territorio novo_territorio(nome, resistencia, cria_produto, cria_ouro);
                 cout << novo_territorio.getAsString() << endl;
                 territorios.push_back(novo_territorio);
             }
@@ -34,7 +34,7 @@ void MUNDO::insere_territorios(string tipo, int num) {
         cout << "Territorio nao existe !" << endl;
 }
 
-bool MUNDO::verifica_numero(string num) const{
+bool Mundo::verifica_numero(string num) const{
     for (unsigned int i = 0; i < num.length(); i++)
         if (num[i] < '0' || num[i] > '9') 
             return false;
@@ -44,21 +44,21 @@ bool MUNDO::verifica_numero(string num) const{
 /*
  *  Carrega Territorios no Mundo por ficheiro
  */
-void MUNDO::carrega_fich_territorios(string nome_ficheiro){
+void Mundo::carrega_fich_territorios(string nome_ficheiro){
     ifstream ifs(nome_ficheiro);
     string tipo, num;
     if (ifs.fail()) {
-        cout << "Nome do ficheiro invalido !" << endl;
+        cout << "ERRO > Nome do ficheiro invalido !" << endl;
         return;
     }
     while (ifs >> tipo >> num) {
         if (!verifica_numero(num)) {
-            cout << "Numero invalido no ficheiro !" << endl;
+            cout << "ERRO > Numero invalido no ficheiro !" << endl;
             continue; // passa a proxima iteracao do ciclo
         }
         else if (ifs.fail()) {
             ifs.clear();
-            cout << "Ocorreu um erro ao ler o ficheiro !" << endl;
+            cout << "ERRO > Ocorreu um erro ao ler o ficheiro !" << endl;
         }
         else 
             insere_territorios(tipo, stoi(num));
@@ -66,10 +66,10 @@ void MUNDO::carrega_fich_territorios(string nome_ficheiro){
 }
 
 /*
- *  Lista Territórios no Mundo (especifico)
+ *  Lista Território no Mundo (especifico)
  *      ex.: lista <nome territorio>
  */
-void MUNDO::lista_territorios(string terr) const{
+void Mundo::lista_territorios(string terr) const{
     bool existe = false;
     for (auto t : territorios) {
         string nome_t = t.get_nome();
@@ -86,13 +86,13 @@ void MUNDO::lista_territorios(string terr) const{
  *  Lista todos os Territórios no Mundo
  *      ex.: lista
  */
-void MUNDO::lista_territorios() const{
+void Mundo::lista_territorios() const{
     // lista
-    cout << "--- Territorios do mundo ---" << endl;
+    cout << ">> Territorios do mundo" << endl;
     for (auto t : territorios) {
         cout << t.getAsString() << endl;
     }
-    cout << i.getAsString() << endl;
+    cout << imperio.getAsString() << endl;
 
 }
 
@@ -104,27 +104,32 @@ int fator_sorte() { return (rand() % 6) + 1; }
 /*
  *  Verifica possibilidade de conquista
  */
-bool MUNDO::verifica_conquista(string nome_t) {
+bool Mundo::verifica_conquista(string nome_t) {
     bool possivel = false;
+    cout << "\tA tentar conquistar " << nome_t << endl;
     for (auto t : territorios)
         if (nome_t == t.get_nome())
-            if (i.getFMilitar() + fator_sorte() >= t.get_resistencia()) 
+            if (imperio.get_forcaMilitar() + fator_sorte() >= t.get_resistencia()) {
                 possivel = true;
+                cout << "\tPossivel conquista de " << nome_t << endl;
+            }
     if (!possivel) {
-        if (i.getFMilitar() != 0) {
-            i.setFMilitar(i.getFMilitar() - 1);
+        if (imperio.get_forcaMilitar() != 0) {
+            imperio.set_forcaMilitar(imperio.get_forcaMilitar() - 1);
         }
     }
+    
     return possivel;
 }
 
 /*
  * Adiciona um Territorio conquistado ao Mundo
  */
-void MUNDO::adiciona_conquista(string terr) {
+void Mundo::adiciona_conquista(string territorio) {
     for (auto t : territorios) {
-        if (terr == t.get_nome()) {
-            i.addTerritorio(t);
+        if (territorio == t.get_nome()) {
+            imperio.addTerritorio(t);
+            cout << "\tConquista de " << territorio << " feita!" << endl;
         }
     }
 }

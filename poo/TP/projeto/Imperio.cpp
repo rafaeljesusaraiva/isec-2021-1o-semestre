@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   IMPERIO.cpp
+ * File:   Imperio.cpp
  * Author: rafaeljesusaraiva
  * 
  * Created on 8 de dezembro de 2020, 21:40
@@ -13,10 +13,10 @@
 
 #include "Imperio.h"
 
-IMPERIO::IMPERIO() {
+Imperio::Imperio() {
     string nomeInicial = "Territorio Inicial";
     int resistenciaInicial = 9, criaProdutoInicial = 1, criaOuroInicial = 1;
-    TERRITORIO territorio_inicial(nomeInicial, resistenciaInicial, criaProdutoInicial, criaOuroInicial);
+    Territorio territorio_inicial(nomeInicial, resistenciaInicial, criaProdutoInicial, criaOuroInicial);
     territorios_imperio.push_back(territorio_inicial);
     armazem = 0;
     cofre = 0;
@@ -27,20 +27,20 @@ IMPERIO::IMPERIO() {
 }
 
 
-IMPERIO::IMPERIO(int& in_armazem, int& in_cofre, int& in_forcaMilitar, int& in_capacidadeArmazem, int& in_capacidadeCofre, int& in_capacidadeMilitar):
+Imperio::Imperio(int& in_armazem, int& in_cofre, int& in_forcaMilitar, int& in_capacidadeArmazem, int& in_capacidadeCofre, int& in_capacidadeMilitar):
     armazem(in_armazem), cofre(in_cofre), forca_militar(in_forcaMilitar), 
     capacidade_armazem(in_capacidadeArmazem), capacidade_cofre(in_capacidadeCofre), 
     capacidade_militar(in_capacidadeMilitar) {
     string nomeInicial = "Territorio Inicial";
     int resistenciaInicial = 9, criaProdutoInicial = 1, criaOuroInicial = 1;
-    TERRITORIO territorio_inicial(nomeInicial, resistenciaInicial, criaProdutoInicial, criaOuroInicial);
+    Territorio territorio_inicial(nomeInicial, resistenciaInicial, criaProdutoInicial, criaOuroInicial);
     territorios_imperio.push_back(territorio_inicial);
 }
 
 
-string IMPERIO::getAsString() const {
+string Imperio::getAsString() const {
     ostringstream os;
-    os << ">> Territorios" << endl;
+    os << ">> Territorios do Imperio" << endl;
     os << "\t";
     for (auto t : territorios_imperio)
         os << t.get_nome() << "  ";
@@ -55,9 +55,9 @@ string IMPERIO::getAsString() const {
     return os.str();
 }
 
-int IMPERIO::getFMilitar() const { return forca_militar; }
-
-void IMPERIO::setFMilitar(int FMilReduzida) { forca_militar = FMilReduzida; }
-
-void IMPERIO::addTerritorio(TERRITORIO &terr) { territorios_imperio.push_back(terr); }
+int Imperio::get_forcaMilitar() const { return forca_militar; }
+int Imperio::get_capacidadeForcaMilitar() const { return capacidade_militar; }
+void Imperio::set_forcaMilitar(int novaForca) { forca_militar = novaForca; }
+void Imperio::set_capacidadeForcaMilitar(int novaCapacidade) { capacidade_militar = novaCapacidade; }
+void Imperio::addTerritorio(Territorio &terr) { territorios_imperio.push_back(terr); }
 

@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   TECNOLOGIA.cpp
+ * File:   Tecnologia.cpp
  * Author: rafaeljesusaraiva
  * 
  * Created on 8 de dezembro de 2020, 21:39

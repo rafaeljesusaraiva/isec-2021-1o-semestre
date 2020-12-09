@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   TERRITORIO.h
+ * File:   Territorio.h
  * Author: rafaeljesusaraiva
  *
  * Created on 8 de dezembro de 2020, 21:39
@@ -21,13 +21,15 @@
 
 using namespace std;
 
-class TERRITORIO
+class Territorio
 {
     int resistencia;
     int cria_produto;
     int cria_ouro;
 
     /*
+     *  Ainda não há verificacao de nomes
+     * 
      *  Continente
      *      > Castelo, Duna, Fortaleza, Mina, Montanha, Planicie
      * 
@@ -38,10 +40,12 @@ class TERRITORIO
 public:
 
     string nome;
-    TERRITORIO(const string& n, const int& in_resistencia, int& in_criaProduto, int& in_criaOuro);
+    Territorio(const string& n, const int& in_resistencia, int& in_criaProduto, int& in_criaOuro);
     string getAsString() const;
     string get_nome() const;
     int get_resistencia() const;
+    int get_criaOuro() const;
+    int get_criaProduto() const;
 };
 
 #endif /* TERRITORIO_H */

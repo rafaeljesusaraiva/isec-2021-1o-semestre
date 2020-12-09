@@ -24,15 +24,15 @@
 
 using namespace std;
 
+int getFatorSorte();
 
-class MUNDO
-{
-    vector<TERRITORIO> territorios;
+class Mundo {
+    vector<Territorio> territorios;
     vector<string> tipos = { "planicie", "montanha", "mina", "duna", "castelo", "fortaleza", "refugio_dos_piratas", "pescaria" };
     vector<int> enumeracao = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    IMPERIO i;
+    Imperio imperio;
 public:
-    //Mundo(){}
+    //Mundo();
     void insere_territorios(string tipo, int num);
     void mostra_territorios() const;
     bool verifica_numero(string num) const;
@@ -41,7 +41,14 @@ public:
     void lista_territorios() const;
     bool verifica_conquista(string nome_t);
     void adiciona_conquista(string terr);
+    
+    // DEBUG
+    void adiciona_maxForcaMilitar() {
+        imperio.set_capacidadeForcaMilitar(20);
+        imperio.set_forcaMilitar(imperio.get_capacidadeForcaMilitar());
+        cout << "[DEV] Forca militar maximizada (" << imperio.get_forcaMilitar() << "/" << imperio.get_capacidadeForcaMilitar() << ") !" << endl;
+    }
 };
-int getFatorSorte();
+
 #endif /* MUNDO_H */
 

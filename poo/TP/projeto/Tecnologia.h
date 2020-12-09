@@ -5,7 +5,7 @@
  */
 
 /* 
- * File:   TECNOLOGIA.h
+ * File:   Tecnologia.h
  * Author: rafaeljesusaraiva
  *
  * Created on 8 de dezembro de 2020, 21:39
@@ -14,9 +14,9 @@
 #ifndef TECNOLOGIA_H
 #define TECNOLOGIA_H
 
-class TECNOLOGIA {
+class Tecnologia {
 public:
-    TECNOLOGIA();
+    Tecnologia();
 private:
 
 };
