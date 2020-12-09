@@ -1,5 +1,7 @@
 # Trabalho Prático de POO
 
+    Projeto criado no netbeans 12 (Ubuntu 20.04)
+
 ## Definições
 
     set<>       - define algo
