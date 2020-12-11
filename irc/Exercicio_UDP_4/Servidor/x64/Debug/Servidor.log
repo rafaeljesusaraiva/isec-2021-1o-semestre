@@ -1,0 +1,3 @@
+﻿  servidorUDPv1a_basico.c
+C:\Users\Rafael Jesus Saraiva\Desktop\IRC\Exercicio_UDP_4\Servidor\servidorUDPv1a_basico.c(72,47): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
+  Servidor.vcxproj -> C:\Users\Rafael Jesus Saraiva\Desktop\IRC\Exercicio_UDP_4\x64\Debug\Servidor.exe
