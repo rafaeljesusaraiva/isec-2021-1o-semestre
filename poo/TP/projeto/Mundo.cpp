@@ -17,7 +17,7 @@
 
 void Mundo::insere_territorios(string tipo, int num) {
     bool existe = false;
-    int resistencia = 100, cria_produto = 1, cria_ouro = 1;
+    int resistencia = 5, cria_produto = 1, cria_ouro = 1;
     for (int i = 0; i < num; i++) {
         for (unsigned int j = 0; j < tipos.size(); j++) {
             if (tipos[j] == tipo) {
