@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     //criar o named pipe do arbitro
 	if (access(FIFO_SRV, F_OK) !=  0) {
-        mkfifo(FIFO_SRV,0600);
+        mkfifo(FIFO_SRV, 0600);
         debug("FIFO criado servidor", NULL, -1);
     } else {
         printf("[ERRO] FIFO já existente, instância ARBITRO ligada?\n");
