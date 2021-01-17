@@ -18,6 +18,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <cctype>
 
 using namespace std;
 
@@ -26,16 +27,12 @@ class Territorio
     int resistencia;
     int cria_produto;
     int cria_ouro;
+    string tipo;
 
-    /*
-     *  Ainda não há verificacao de nomes
-     * 
-     *  Continente
-     *      > Castelo, Duna, Fortaleza, Mina, Montanha, Planicie
-     * 
-     *  Ilhas
-     *      > Pescaria, Refugio dos Piratas
-     */
+    string default_continente[6] = {"Castelo", "Duna", "Fortaleza", "Mina", "Montanha", "Planicie"};
+    string default_ilha[2] = {"Pescaria", "Refugio dos Piratas"};
+    
+    bool verifica_territorio(string nome);
 
 public:
 

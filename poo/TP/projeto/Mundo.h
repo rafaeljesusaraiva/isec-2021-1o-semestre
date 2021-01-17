@@ -42,6 +42,14 @@ public:
     bool verifica_conquista(string nome_t);
     void adiciona_conquista(string terr);
     
+    void executar_evento(string nome, int fase) {
+        imperio.evento_aleatorio(nome, fase);
+    }
+    void aumenta_militar();
+    void aumenta_tecnologia();
+    void aumenta_produtos();
+    void aumenta_ouro();
+    
     // DEBUG
     void adiciona_maxForcaMilitar() {
         imperio.set_capacidadeForcaMilitar(20);

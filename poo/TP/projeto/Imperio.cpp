@@ -37,6 +37,20 @@ Imperio::Imperio(int& in_armazem, int& in_cofre, int& in_forcaMilitar, int& in_c
     territorios_imperio.push_back(territorio_inicial);
 }
 
+/*
+ * Executa um evento aleatorio
+ */
+void Imperio::evento_aleatorio(string nome, int fase) {
+    /* 
+    * Evento Aleatorio
+    *   - Recurso Abandonado
+    *   - Invasao
+    *   - Alianca Diplomatica
+    *   - Sem Evento
+    */
+}
+
+
 
 string Imperio::getAsString() const {
     ostringstream os;
@@ -60,4 +74,3 @@ int Imperio::get_capacidadeForcaMilitar() const { return capacidade_militar; }
 void Imperio::set_forcaMilitar(int novaForca) { forca_militar = novaForca; }
 void Imperio::set_capacidadeForcaMilitar(int novaCapacidade) { capacidade_militar = novaCapacidade; }
 void Imperio::addTerritorio(Territorio &terr) { territorios_imperio.push_back(terr); }
-

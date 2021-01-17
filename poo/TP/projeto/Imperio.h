@@ -29,6 +29,8 @@ class Imperio
     vector<Territorio> territorios_imperio;
     vector<Tecnologia> tecnologias;
 
+    // armazem -> produtos
+    // cofre -> ouros
     unsigned int armazem, cofre, forca_militar;
     unsigned int capacidade_armazem, capacidade_cofre, capacidade_militar;
 
@@ -36,6 +38,8 @@ public:
 
     Imperio();
     Imperio(int& arm, int& cof, int& f_mil, int& c_arm, int& c_cof, int& c_mil);
+    
+    void evento_aleatorio(string nome, int fase);
     
     string getAsString() const;
     int get_forcaMilitar() const;

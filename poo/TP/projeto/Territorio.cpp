@@ -14,7 +14,7 @@
 #include "Territorio.h"
 
 Territorio::Territorio(const string& in_nome, const int& in_resistencia, int& in_criaProduto, int& in_criaOuro):
-    nome(in_nome), resistencia(in_resistencia), cria_produto(in_criaProduto), cria_ouro(in_criaOuro) {}
+nome(in_nome), resistencia(in_resistencia), cria_produto(in_criaProduto), cria_ouro(in_criaOuro) {}
 
 
 string Territorio::getAsString() const {

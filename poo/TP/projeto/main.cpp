@@ -17,8 +17,11 @@ int main() {
     // Inicialização randomizer
     srand(time(NULL));
 
-    Interacao *Utilizador = new Interacao();
-    Utilizador->menu();
+    // Cria o jogo e ativa a configuracao
+    Interacao *Jogo = new Interacao();
+    
+    // Inicia o Jogo
+    Jogo->menu();
 
     return 0;
 }

@@ -24,6 +24,7 @@ void Mundo::insere_territorios(string tipo, int num) {
                 existe = true;
                 enumeracao[j]++;
                 string nome = tipo + to_string(enumeracao[j]);
+                // Verificacao se territorio foi inserido
                 Territorio novo_territorio(nome, resistencia, cria_produto, cria_ouro);
                 cout << novo_territorio.getAsString() << endl;
                 territorios.push_back(novo_territorio);
@@ -134,4 +135,32 @@ void Mundo::adiciona_conquista(string territorio) {
     }
 }
 
+void Mundo::aumenta_militar() {
+    // verifica se pode aumentar
+        // aumenta
+        // ativa flag
+    // senao
+        // erro
+}
 
+void Mundo::aumenta_tecnologia() {
+    // verifica se pode aumentar
+        // aumenta
+        // ativa flag
+    // senao
+        // erro
+}
+
+void Mundo::aumenta_produtos() {
+    // verifica se pode produzir
+        // produz
+    // senao
+        // erro
+}
+
+void Mundo::aumenta_ouro() {
+    // verifica se pode produzir
+        // produz
+    // senao
+        // erro
+}

@@ -15,9 +15,9 @@
 #define TECNOLOGIA_H
 
 class Tecnologia {
+    
 public:
     Tecnologia();
-private:
 
 };
 

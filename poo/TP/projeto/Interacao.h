@@ -32,7 +32,11 @@ class Interacao {
     Mundo mundo;
 public:
     Interacao();
+    int configuracao_cria(vector<string> com_args);
+    void configuracao_lista(vector<string> com_args);
+    void mostra_ajuda_configuracao();
     void menu();
+    void mostra_ajuda_jogo();
     vector<string> separa_args(string comando, vector<string>& args);
 };
 
