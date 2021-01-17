@@ -30,13 +30,21 @@ using namespace std;
 
 class Interacao {
     Mundo mundo;
+    
+    bool flag_militar = false;
+    bool flag_tecnologia = false;
 public:
     Interacao();
     int configuracao_cria(vector<string> com_args);
     void configuracao_lista(vector<string> com_args);
     void mostra_ajuda_configuracao();
     void menu();
+    void proxRonda(int turno);
     void mostra_ajuda_jogo();
+    int mostraPontuacao();
+    
+    void resumo();
+    void fim();
     vector<string> separa_args(string comando, vector<string>& args);
 };
 

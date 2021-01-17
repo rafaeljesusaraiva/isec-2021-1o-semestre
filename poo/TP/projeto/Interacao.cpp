@@ -110,6 +110,7 @@ void Interacao::menu() {
          * - Executa eventos aleatorios e continua
          */
         if (com_args[0].compare("passa") == 0) {
+            this->proxRonda(turno);
             continue;
         }
         
@@ -118,7 +119,14 @@ void Interacao::menu() {
          *   <maismilitar>
          */
         if (com_args[0].compare("maismilitar") == 0) {
-            (this->mundo).aumenta_militar();
+            if (this->flag_militar == false) {
+                if ((this->mundo).aumenta_militar())
+                    this->flag_militar = true;
+                else
+                    cout << "Nao foi possivel adquirir militares." << endl;
+            } else {
+                cout << "Forca militar ja aumentada esta ronda" << endl;
+            }
             turno--;
             continue;
         }
@@ -128,7 +136,14 @@ void Interacao::menu() {
          *   <adquire>
          */
         if (com_args[0].compare("adquire") == 0) {
-            (this->mundo).aumenta_tecnologia();
+            if (this->flag_tecnologia == false) {
+                if ((this->mundo).adiciona_tecnologia(com_args[1]))
+                    this->flag_tecnologia = true;
+                else
+                    cout << "Nao foi possivel adquirir tecnologia." << endl;
+            } else {
+                cout << "Teecnologia ja adquirida esta ronda" << endl;
+            }
             turno--;
             continue;
         }
@@ -164,6 +179,8 @@ void Interacao::menu() {
                 cout << "Lista com numero de argumentos invalido !";
                 cout << endl << endl;
             }
+            turno--;
+            continue;
         }
         
         /* 
@@ -180,9 +197,13 @@ void Interacao::menu() {
          */
         if (com_args[0].compare("fevento") == 0)
             (this->mundo).executar_evento(com_args[1], turno);
-        else
-            (this->mundo).executar_evento("random", turno);
             
+        if (this->mundo.imperioPerdido()) {
+            break;
+        }
+        
+        this->proxRonda(turno);
+        
         /* 
          * Opcao DEV para sair
          *   <sair>
@@ -190,6 +211,13 @@ void Interacao::menu() {
         if (com_args[0].compare("sair") == 0)
             break;
     }
+}
+
+void Interacao::proxRonda(int turno) { 
+    (this->mundo).executar_evento("random", turno);
+    (this->mundo).produzMateriais();
+    this->flag_militar = false;
+    this->flag_tecnologia = false;
 }
 
 void Interacao::mostra_ajuda_jogo() {
@@ -200,6 +228,42 @@ void Interacao::mostra_ajuda_jogo() {
     cout << "\t> lista <territorio> (lista info do territorio)" << endl;
     cout << "\t> maxMilitar (define forca e cap. militar para 20 [DEBUG])" << endl;
     cout << "\t> sair (sai antecipadamente do jogo [DEBUG])" << endl;
+}
+
+/*
+ *  Calcula pontuacao final do jogo
+ */
+int Interacao::mostraPontuacao() {
+    int pontuacao = 0;
+    
+    // pontos conquista
+    pontuacao += mundo.pontosConquistaImperio();
+    
+    // pontos tecnologia
+    pontuacao += this->mundo.obtem_tecnologiaImperio();
+    
+    // bonus cientifico (>5 tecnologia)
+    if (this->mundo.obtem_tecnologiaImperio() >= 5) 
+        pontuacao += 1;
+    
+    // bonus imperador supremo
+    // if (territorios mundo pertencerem ao imperio) pontuacao += 3;
+    
+    return pontuacao;
+}
+
+void Interacao::resumo() {
+    // Limpar ecra
+    cout << string( 100, '\n' );
+    cout << "Obteve " << this->mostraPontuacao() << " pontos!" << endl;
+    // apresentar resumo
+    cout << "Resumo deste Jogo:" << endl;
+    this->mundo.lista_imperio();
+}
+
+void Interacao::fim() {
+    cout << endl << endl;
+    cout << "\tFim do Jogo!" << endl << endl;
 }
 
 /*

@@ -35,6 +35,24 @@ void Mundo::insere_territorios(string tipo, int num) {
         cout << "Territorio nao existe !" << endl;
 }
 
+void Mundo::remove_territorio(string nome) {
+    int posTerritorio = -1;
+    for (size_t i=0; i < this->territorios.size(); i++) {
+        if (this->territorios[i].nome == nome) {
+            posTerritorio = i;
+            break;
+        }
+    }
+    if (posTerritorio == -1) {
+        cout << "[Erro] Nenhum territorio com o nome pedido!" << endl;
+        return;
+    } else {
+        cout << ">> Territorio '" << this->territorios[posTerritorio].nome << "' removido do Mundo!" << endl;
+        if (posTerritorio > 0) posTerritorio -= 1;
+        this->territorios.erase(this->territorios.begin() + posTerritorio);
+    }
+}
+
 bool Mundo::verifica_numero(string num) const{
     for (unsigned int i = 0; i < num.length(); i++)
         if (num[i] < '0' || num[i] > '9') 
@@ -98,6 +116,14 @@ void Mundo::lista_territorios() const{
 }
 
 /*
+ *  Lista todos os Territórios no Mundo
+ *      ex.: lista
+ */
+void Mundo::lista_imperio() const {
+    cout << imperio.getAsString() << endl;
+}
+
+/*
  *  Obtem fator de sorte em inteiro
  */
 int fator_sorte() { return (rand() % 6) + 1; }
@@ -130,37 +156,54 @@ void Mundo::adiciona_conquista(string territorio) {
     for (auto t : territorios) {
         if (territorio == t.get_nome()) {
             imperio.addTerritorio(t);
+            imperio.adiciona_pontosConquista();
             cout << "\tConquista de " << territorio << " feita!" << endl;
         }
     }
 }
 
-void Mundo::aumenta_militar() {
-    // verifica se pode aumentar
-        // aumenta
-        // ativa flag
-    // senao
-        // erro
+void Mundo::executar_evento(string nome, int fase) {
+    imperio.evento_aleatorio(nome, fase);
 }
 
-void Mundo::aumenta_tecnologia() {
-    // verifica se pode aumentar
-        // aumenta
-        // ativa flag
-    // senao
-        // erro
+bool Mundo::aumenta_militar() {
+    return this->imperio.aumenta_militar();
 }
 
-void Mundo::aumenta_produtos() {
-    // verifica se pode produzir
-        // produz
-    // senao
-        // erro
+bool Mundo::adiciona_tecnologia(string nome) {
+    return this->imperio.adiciona_tecnologia(nome);
 }
 
-void Mundo::aumenta_ouro() {
-    // verifica se pode produzir
-        // produz
-    // senao
-        // erro
+bool Mundo::aumenta_produtos() {
+    return this->imperio.aumenta_produtos();
+}
+
+bool Mundo::aumenta_ouro() {
+    return this->imperio.aumenta_ouro();
+}
+
+bool Mundo::imperioPerdido() const { 
+    return this->imperio.imperioPerdido(); 
+}
+
+int Mundo::tamanhoImperio() const {
+    return this->imperio.get_tamanho();
+}
+
+int Mundo::pontosConquistaImperio() const {
+    return this->imperio.get_pontosConquista();
+}
+
+int Mundo::obtem_tecnologiaImperio() const {
+    return this->imperio.get_nTecnologias();
+}
+
+void Mundo::produzMateriais() {
+    this->imperio.produzMateriais();
+}
+
+void Mundo::adiciona_maxForcaMilitar() {
+    imperio.set_capacidadeForcaMilitar(20);
+    imperio.set_forcaMilitar(imperio.get_capacidadeForcaMilitar());
+    cout << "[DEV] Forca militar maximizada (" << imperio.get_forcaMilitar() << "/" << imperio.get_capacidadeForcaMilitar() << ") !" << endl;
 }

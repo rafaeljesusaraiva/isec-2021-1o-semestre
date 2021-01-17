@@ -22,6 +22,10 @@ int main() {
     
     // Inicia o Jogo
     Jogo->menu();
+    
+    // Termino do Jogo
+    Jogo->resumo();
+    Jogo->fim();
 
     return 0;
 }
