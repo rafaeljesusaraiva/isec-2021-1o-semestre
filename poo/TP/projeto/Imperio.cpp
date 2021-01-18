@@ -15,8 +15,8 @@
 
 Imperio::Imperio() {
     string nomeInicial = "Territorio Inicial";
-    int resistenciaInicial = 9, criaProdutoInicial = 1, criaOuroInicial = 1;
-    Territorio territorio_inicial(nomeInicial, resistenciaInicial, criaProdutoInicial, criaOuroInicial);
+    string tipo = "territorioInicial";
+    Territorio territorio_inicial(nomeInicial, tipo);
     territorios_imperio.push_back(territorio_inicial);
     armazem = 0;
     cofre = 0;
@@ -32,8 +32,8 @@ Imperio::Imperio(int& in_armazem, int& in_cofre, int& in_forcaMilitar, int& in_c
     capacidade_armazem(in_capacidadeArmazem), capacidade_cofre(in_capacidadeCofre), 
     capacidade_militar(in_capacidadeMilitar) {
     string nomeInicial = "Territorio Inicial";
-    int resistenciaInicial = 9, criaProdutoInicial = 1, criaOuroInicial = 1;
-    Territorio territorio_inicial(nomeInicial, resistenciaInicial, criaProdutoInicial, criaOuroInicial);
+    string tipo = "territorioInicial";
+    Territorio territorio_inicial(nomeInicial, tipo);
     territorios_imperio.push_back(territorio_inicial);
 }
 
@@ -45,29 +45,61 @@ void Imperio::evento_aleatorio(string nome, int fase) {
     * Evento Aleatorio (1-4)
     */
     int random = rand() % 4 + 1;
-    switch (random) {
-        /*   - Recurso Abandonado    */
-        case 1:
-            if (fase < 6)
-                this->evento_recursoAbandonado("produto");
-            else
-                this->evento_recursoAbandonado("ouro");
-            break;
-    
-        /*   - Invasao  */
-        case 2:
+    if (nome.compare("random") == 0)
+        switch (random) {
+            /*   - Recurso Abandonado    */
+            case 1:
+                if (fase < 6)
+                    this->evento_recursoAbandonado("produto");
+                else
+                    this->evento_recursoAbandonado("ouro");
+                break;
+
+            /*   - Invasao  */
+            case 2:
+                this->evento_invasao(fase);
+                break;
+
+            /*   - Alianca Diplomatica  */
+            case 3:
+                this->evento_aliancaDiplomatica();
+                break;
+
+            /*   - Sem Evento   */
+            default:
+                cout << "Nenhum evento aconteceu ao terminar a fase" << endl;
+                break;
+        }
+    else {
+        cout << "A executar evento pedido.. " << endl;
+        if (nome.compare("recursoAbandonadoOuro") == 0)
+            this->evento_recursoAbandonado("ouro");
+        else if (nome.compare("recursoAbandonadoProduto") == 0)
+            this->evento_recursoAbandonado("produto");
+        else if (nome.compare("invasao") == 0)
             this->evento_invasao(fase);
-            break;
-
-        /*   - Alianca Diplomatica  */
-        case 3:
+        else if (nome.compare("aliancaDiplomatica") == 0) 
             this->evento_aliancaDiplomatica();
-            break;
-
-        /*   - Sem Evento   */
-        default:
-            cout << "Nenhum evento aconteceu ao terminar a fase" << endl;
-            break;
+        else {
+            cout << "\tErro no evento pedido, a executar um aleatorio!" << endl;
+            switch (random) {
+                case 1:
+                    if (fase < 6)
+                        this->evento_recursoAbandonado("produto");
+                    else
+                        this->evento_recursoAbandonado("ouro");
+                    break;
+                case 2:
+                    this->evento_invasao(fase);
+                    break;
+                case 3:
+                    this->evento_aliancaDiplomatica();
+                    break;
+                default:
+                    cout << "Nenhum evento aconteceu ao terminar a fase" << endl;
+                    break;
+            }
+        }
     }
 }
 
@@ -134,8 +166,26 @@ void Imperio::produzMateriais() {
         total_ouro += territorios_imperio[i].get_criaOuro();
     }
     // adicionar ao imperio
-    this->adiciona_ouro(total_ouro);
-    this->adiciona_produtos(total_materiais);
+    if (this->trocaOuro == true) {
+        int dif = this->capacidade_cofre - total_ouro;
+        while (dif - 2 >= 0) {
+            this->adiciona_produtos(1);
+            dif -= 2;
+        }
+        this->cofre = this->capacidade_cofre;
+    } else {
+        this->adiciona_ouro(total_ouro);
+    }
+    if (this->trocaOuro == true) {
+        int dif = this->capacidade_armazem - total_materiais;
+        while (dif - 2 >= 0) {
+            this->adiciona_ouro(1);
+            dif -= 2;
+        }
+        this->armazem = this->capacidade_armazem;
+    } else {
+        this->adiciona_produtos(total_materiais);
+    }
 }
 
 string Imperio::getAsString() const {
@@ -146,12 +196,9 @@ string Imperio::getAsString() const {
         os << t.get_nome() << "  ";
     os << endl << endl << ">> Detalhes Imperio" << endl;
     // Ignorar Tecnologias
-    os << "\tProdutos em Armazem: " << armazem << endl;
-    os << "\tCapacidade do Armazem : " << capacidade_armazem << endl;
-    os << "\tOuro no Cofre: " << cofre << endl;
-    os << "\tCapacidade do cofre : " << capacidade_cofre << endl;
-    os << "\tForca Militar: " << forca_militar << endl;
-    os << "\tCapacidade Militar: " << capacidade_militar << endl;
+    os << "\tArmazem\t > " << armazem << " produtos de " << capacidade_armazem << " total"<< endl;
+    os << "\tCofre\t > " << cofre << " ouro de " << capacidade_cofre << " total"<< endl;
+    os << "\tMilitar\t > " << forca_militar << " militares de " << capacidade_militar << " total"<< endl;
     return os.str();
 }
 
@@ -232,7 +279,7 @@ bool Imperio::aumenta_ouro() {
 }
 
 void Imperio::mostra_tecnologias() const { 
-    return this->tecnologias.mostra_tecnologias(); 
+    this->tecnologias.mostra_tecnologias(); 
 }
 
 int Imperio::get_nTecnologias() const { 
@@ -276,7 +323,7 @@ bool Imperio::adiciona_tecnologia(string nome) {
         this->cofre -= 2;
         return true;
     } else 
-        cout << "Erro ao adicionar tecnologia (imperio.cpp)" << endl;
+        cout << "Erro ao adicionar tecnologia (falta de fundos)" << endl;
     return true;
 }
 

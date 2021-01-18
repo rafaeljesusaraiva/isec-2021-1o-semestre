@@ -41,7 +41,7 @@ public:
     void menu();
     void proxRonda(int turno);
     void mostra_ajuda_jogo();
-    int mostraPontuacao();
+    void mostraPontuacao();
     
     void resumo();
     void fim();

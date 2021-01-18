@@ -29,15 +29,24 @@ class Territorio
     int cria_ouro;
     string tipo;
 
-    string default_continente[6] = {"Castelo", "Duna", "Fortaleza", "Mina", "Montanha", "Planicie"};
-    string default_ilha[2] = {"Pescaria", "Refugio dos Piratas"};
+    vector<string> default_continente = {"castelo", "duna", "fortaleza", "mina", "montanha", "planicie"};
+    vector<string> default_continente_nome = {"Castelo", "Duna", "Fortaleza", "Mina", "Montanha", "Planicie"};
+    vector<int> default_continente_resistencia = {7, 4, 8, 5, 6, 5};
+    vector<int> default_continente_produto = {3, 1, 0, 0, 0, 1};
+    vector<int> default_continente_ouro = {1, 0, 0, 1, 0, 1};
+    
+    vector<string> default_ilha = {"pescaria", "refugioDosPiratas"};
+    vector<string> default_ilha_nome = {"Pescaria", "Refugio dos Piratas"};
+    vector<int> default_ilha_resistencia = {9, 9};
+    vector<int> default_ilha_produto = {2, 0};
+    vector<int> default_ilha_ouro = {0, 1};
     
     bool verifica_territorio(string nome);
 
 public:
 
     string nome;
-    Territorio(const string& n, const int& in_resistencia, int& in_criaProduto, int& in_criaOuro);
+    Territorio(const string& n, string& tipo);
     string getAsString() const;
     string get_nome() const;
     int get_resistencia() const;

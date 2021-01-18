@@ -15,7 +15,7 @@
 
 bool Tecnologia::adiciona_tecnologia(string tipo) {
     bool check = false;
-    for (size_t i=0; i<sizeof(this->tipos); i++)
+    for (size_t i=0; i<this->tipos.size(); i++)
         if (this->tipos[i].compare(tipo) == 0)
             check = true;
     if (check) {
@@ -29,15 +29,15 @@ bool Tecnologia::adiciona_tecnologia(string tipo) {
 
 void Tecnologia::mostra_tecnologias() const {
     cout << "Tecnologias disponiveis: ";
-    if (sizeof(this->adquiridas) == 0)
+    if (this->adquiridas.size() == 0)
         cout << "Nenhuma" << endl;
     else {
         cout << endl;
-        for (size_t i=0; i<sizeof(this->adquiridas); i++)
+        for (size_t i=0; i<this->adquiridas.size(); i++)
             cout << "\t " << this->adquiridas[i] << endl;
     }
 }
 
 int Tecnologia::get_nTecnologias() const {
-    return sizeof(this->adquiridas);
+    return this->adquiridas.size();
 }

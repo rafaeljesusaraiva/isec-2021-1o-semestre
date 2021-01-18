@@ -57,6 +57,9 @@ public:
     
     void produzMateriais();
     
+    int total_territorios_mundo() const;
+    int total_territorios_imperio() const;
+    
     // DEBUG
     void adiciona_maxForcaMilitar();
 };

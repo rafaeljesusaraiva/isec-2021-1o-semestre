@@ -8,6 +8,9 @@
 #include "Interacao.h"
 
 Interacao::Interacao() {
+    cout << endl << "Compilado no Netbeans para Mac" << endl;
+    cout << "Em falta: " << endl;
+    cout << "\t- Mudanca de criacao dos territorios ao longo do jogo" << endl;
     cout << ">> MODO CONFIGURACAO" << endl << endl;
     do {
         cout << "\tInserir nova configuracao? [sim/nao]" << endl;
@@ -85,6 +88,7 @@ void Interacao::menu() {
     
     for (int turno = 1; turno <= 12; turno++) {
         string comando = "";
+        bool sucessoComando = false;
         do {
             cout << "> Comando Turno [" << turno << "]: ";
             getline(cin, comando, '\n');
@@ -100,9 +104,11 @@ void Interacao::menu() {
          * Opcao Conquista
          *   <conquista>
          */
-        if (com_args[0].compare("conquista") == 0)
+        if (com_args[0].compare("conquista") == 0) {
             if ((this->mundo).verifica_conquista(com_args[1]))
                 (this->mundo).adiciona_conquista(com_args[1]);
+            sucessoComando = true;
+        }
         
         /* 
          * Opcao Passa
@@ -133,10 +139,11 @@ void Interacao::menu() {
         
         /* 
          * Opcao Aumentar Tecnologia (1x por turno)
-         *   <adquire>
+         *   <adquire *tipo*>
          */
         if (com_args[0].compare("adquire") == 0) {
             if (this->flag_tecnologia == false) {
+                cout << " Cheguei a flag";
                 if ((this->mundo).adiciona_tecnologia(com_args[1]))
                     this->flag_tecnologia = true;
                 else
@@ -162,8 +169,10 @@ void Interacao::menu() {
          * Opcao Produz ouro (+1 ouro ; -2 prod)
          *   <maisouro>
          */
-        if (com_args[0].compare("maisouro") == 0) 
+        if (com_args[0].compare("maisouro") == 0){
             (this->mundo).aumenta_ouro();
+            sucessoComando = true;
+        }
         
         /* 
          * Opcao Lista
@@ -187,22 +196,24 @@ void Interacao::menu() {
          * Opcao Max Militar
          *   <maxMilitar>
          */
-        if (com_args[0].compare("maxMilitar") == 0)
+        if (com_args[0].compare("maxMilitar") == 0){
             (this->mundo).adiciona_maxForcaMilitar();
+            sucessoComando = true;
+        }
         
         /* 
          * Forca evento
          *   <fevento *nome*>
          * Executa evento e passa à frente aleatórios
          */
-        if (com_args[0].compare("fevento") == 0)
+        if (com_args[0].compare("fevento") == 0) {
             (this->mundo).executar_evento(com_args[1], turno);
+            continue;
+        }
             
         if (this->mundo.imperioPerdido()) {
             break;
         }
-        
-        this->proxRonda(turno);
         
         /* 
          * Opcao DEV para sair
@@ -210,6 +221,16 @@ void Interacao::menu() {
          */
         if (com_args[0].compare("sair") == 0)
             break;
+        
+        if (sucessoComando)
+            this->proxRonda(turno);
+        else {
+            cout << "Comando Invalido!" << endl;
+            turno--;
+            continue;
+        }
+        
+        
     }
 }
 
@@ -224,38 +245,53 @@ void Interacao::mostra_ajuda_jogo() {
     cout << endl;
     cout << "AJUDA:" << endl;
     cout << "\t> conquista <territorio> (tenta conquistar o territorio)" << endl;
+    cout << "\t> passa (avanca o turno)" << endl;
+    cout << "\t> maismilitar (+1 militar ; -1 produto & -1 ouro)" << endl;
+    cout << "\t> adquire <tipo> (adquire o tipo de tecnologia)" << endl;
+    cout << "\t> maisprod (+1 produto ; -2 ouro)" << endl;
+    cout << "\t> maisouro (+1 ouro ; -2 produto)" << endl;
     cout << "\t> lista (lista todos os territorios)" << endl;
     cout << "\t> lista <territorio> (lista info do territorio)" << endl;
     cout << "\t> maxMilitar (define forca e cap. militar para 20 [DEBUG])" << endl;
+    cout << "\t> fevento <evento> (forca evento)" << endl;
     cout << "\t> sair (sai antecipadamente do jogo [DEBUG])" << endl;
 }
 
 /*
  *  Calcula pontuacao final do jogo
  */
-int Interacao::mostraPontuacao() {
+void Interacao::mostraPontuacao() {
     int pontuacao = 0;
+    int conquistaImperio = mundo.pontosConquistaImperio();
+    int obtemTecnologia = this->mundo.obtem_tecnologiaImperio();
+    int bonusCientifico = 0;
+    if (this->mundo.obtem_tecnologiaImperio() >= 5) 
+        bonusCientifico += 1;
+    int overlord = 0;
+    if (this->mundo.total_territorios_imperio() == this->mundo.total_territorios_mundo()) 
+        overlord += 3;
     
     // pontos conquista
-    pontuacao += mundo.pontosConquistaImperio();
-    
+    pontuacao += conquistaImperio;
     // pontos tecnologia
-    pontuacao += this->mundo.obtem_tecnologiaImperio();
-    
+    pontuacao += obtemTecnologia;
     // bonus cientifico (>5 tecnologia)
-    if (this->mundo.obtem_tecnologiaImperio() >= 5) 
-        pontuacao += 1;
-    
+    pontuacao += bonusCientifico;
     // bonus imperador supremo
-    // if (territorios mundo pertencerem ao imperio) pontuacao += 3;
+    pontuacao += overlord;
     
-    return pontuacao;
+    cout << "Obteve " << pontuacao << " pontos!" << endl;
+    cout << "\tBonus Conquistas: +" << conquistaImperio << endl;
+    cout << "\tBonus Tecnologias: +" << obtemTecnologia << endl;
+    cout << "\tBonus Cientifico: +" << bonusCientifico << endl;
+    cout << "\tBonus Overlord: +" << overlord << endl << endl;
+    
 }
 
 void Interacao::resumo() {
     // Limpar ecra
     cout << string( 100, '\n' );
-    cout << "Obteve " << this->mostraPontuacao() << " pontos!" << endl;
+    this->mostraPontuacao();
     // apresentar resumo
     cout << "Resumo deste Jogo:" << endl;
     this->mundo.lista_imperio();

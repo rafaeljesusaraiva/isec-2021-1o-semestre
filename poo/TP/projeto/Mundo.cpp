@@ -17,7 +17,6 @@
 
 void Mundo::insere_territorios(string tipo, int num) {
     bool existe = false;
-    int resistencia = 5, cria_produto = 1, cria_ouro = 1;
     for (int i = 0; i < num; i++) {
         for (unsigned int j = 0; j < tipos.size(); j++) {
             if (tipos[j] == tipo) {
@@ -25,9 +24,14 @@ void Mundo::insere_territorios(string tipo, int num) {
                 enumeracao[j]++;
                 string nome = tipo + to_string(enumeracao[j]);
                 // Verificacao se territorio foi inserido
-                Territorio novo_territorio(nome, resistencia, cria_produto, cria_ouro);
-                cout << novo_territorio.getAsString() << endl;
-                territorios.push_back(novo_territorio);
+                try {
+                    Territorio novo_territorio(nome, tipo);
+                    cout << novo_territorio.getAsString() << endl;
+                    territorios.push_back(novo_territorio);
+                } catch (const char* msg) {
+                    cout << "Nao inseriu " << nome << " do tipo " << tipo << endl;
+                    continue;
+                }
             }
         }
     }
@@ -112,7 +116,7 @@ void Mundo::lista_territorios() const{
         cout << t.getAsString() << endl;
     }
     cout << imperio.getAsString() << endl;
-
+    imperio.mostra_tecnologias();
 }
 
 /*
@@ -121,6 +125,7 @@ void Mundo::lista_territorios() const{
  */
 void Mundo::lista_imperio() const {
     cout << imperio.getAsString() << endl;
+    imperio.mostra_tecnologias();
 }
 
 /*
@@ -200,6 +205,14 @@ int Mundo::obtem_tecnologiaImperio() const {
 
 void Mundo::produzMateriais() {
     this->imperio.produzMateriais();
+}
+
+int Mundo::total_territorios_mundo() const {
+    return this->territorios.size();
+}
+
+int Mundo::total_territorios_imperio() const {
+    return this->imperio.get_tamanho() - 1;
 }
 
 void Mundo::adiciona_maxForcaMilitar() {
