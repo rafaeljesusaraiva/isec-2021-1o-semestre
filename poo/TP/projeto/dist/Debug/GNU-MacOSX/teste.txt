@@ -1,3 +1,5 @@
 mina 2
 duna 1
 castelo 2
+pescaria 1
+planicie 3 
