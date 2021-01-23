@@ -7,6 +7,7 @@ int main(int argc, char *argv[]) {
     // ./arbitro -t [tempo campeonato] -e [tempo espera]
 
     // (stor) export GAMEDIR="./dist/"
+    // (stor, se executado em ./dist ) export GAMEDIR="./"
     // (stor) export MAXPLAYERS=25
 
     char tmp_txt[250];
@@ -20,33 +21,13 @@ int main(int argc, char *argv[]) {
     char *env_MAXPLAYERS = getenv("MAXPLAYERS");
     // Verificar se env_MAXPLAYERS <= 30 e env_MAXPLAYERS >= 2
     // Limite máx -> MAXDEFINEDPLAYERS
-    int int_MAXPLAYERS = atoi(env_MAXPLAYERS);
-
+    int int_MAXPLAYERS = (env_MAXPLAYERS != NULL) ? atoi(env_MAXPLAYERS) : -1;
     check_envVariables(env_GAMEDIR, env_MAXPLAYERS, int_MAXPLAYERS);
-
 
 	// OBTER ARGUMENTOS
     int tmp_Campeonato = 0, tmp_Espera = 0;
-    int opt;
-    while((opt = getopt(argc, argv, "t:e:")) != -1) {  
-        switch(opt) {   
-            case 't':
-                sprintf(tmp_txt, "tempo campeonato (opcao %c): %s\n", opt, optarg);
-                debug(tmp_txt, NULL, -1);
-                tmp_Campeonato = atoi(optarg);
-                break;  
-            case 'e':
-                sprintf(tmp_txt, "tempo espera: %s\n", optarg);
-                debug(tmp_txt, NULL, -1);
-                tmp_Espera = atoi(optarg);
-                break;
-            case '?':  
-                printf("Opcao desconhecida (%c): %c\n", opt, optopt); 
-                break;  
-        }  
-    }
+    get_argumentos(argc, argv, &tmp_Campeonato, &tmp_Espera);
     check_argumentos(tmp_Campeonato, tmp_Espera);
-
 
     //criar o named pipe do arbitro
 	if (access(FIFO_SRV, F_OK) !=  0) {
@@ -74,11 +55,14 @@ int main(int argc, char *argv[]) {
     Jogadores *jogadores = NULL;
     Comm_cli pedido_cli;
     struct timeval tempo;
+    pthread_mutex_t trinco;
 
     Jogos *jogos = obtem_jogos(env_GAMEDIR);
 
+    pthread_mutex_init(&trinco, NULL);
+
     do {
-		printf("\nCOMANDO (ARBITRO): ");
+        printf("\n[ARBITRO]> ");
 		fflush(stdout);
         
         FD_ZERO(&fds);
@@ -88,11 +72,13 @@ int main(int argc, char *argv[]) {
         FD_SET(fd, &fds);
         tempo.tv_sec = tmp_Espera;
         tempo.tv_usec = 0;
+        // printf("select begin\n");
         res = select(fd+1, &fds, NULL, NULL, &tempo);
-
+        // printf("select end\n");
         // if (res == 0) { 
         //     printf("Nao ha dados de nenhuma das fontes!!\n"); 
         // } else
+
         //TECLADO (Escrever no arbitro)
         if (res > 0 && FD_ISSET(0, &fds)) {
             // ler comandos admin
@@ -101,8 +87,10 @@ int main(int argc, char *argv[]) {
 			if (strcmp(cmd_t, "exit") == 0) {
                 termina_jogos(jogadores);
                 break;
-            }	
-            else if (strcmp(cmd_t,"players") == 0) {
+            }else if (strcmp(cmd_t,"help") == 0 || strcmp(cmd_t,"h") == 0) {
+                //mostra ajuda
+                mostra_ajuda();
+            }else if (strcmp(cmd_t,"players") == 0) {
                 //lista jogadores em jogo
                 lista_jogadores(jogadores);
             }else if (strcmp(cmd_t,"games") == 0){
@@ -114,42 +102,57 @@ int main(int argc, char *argv[]) {
                 tmp_name++;     // remove K
                 jogadores = remove_jogador(jogadores, tmp_name);
             } else {
-                printf("COMANDO (ARBITRO) desconhecido!!!\n");
-                printf("\nInsira denovo o COMANDO (ARBITRO):");
-                scanf("%s", cmd_t);
-                // printf("Recebi o comando %s!!!\n", cmd_t);
+                printf("Comando desconhecido, tente novamente. \n");
             }
 		} 
         
         //NPIPES (Escrever nos clientes)
+        // >> Recebe pedido do cliente
         else if (res > 0 && FD_ISSET(fd, &fds)) {
+
             // le pedido fifo
             envio = read(fd, &pedido_cli, sizeof(Comm_cli));
             debug("Recebi isto", &pedido_cli, envio);
+
+            // PROCESSA O PEDIDO DO CLIENTE
             int accao = processa_pedido(&pedido_cli, envio);
-            switch (accao) {
-                case -1:
-                    desativa_jogador(jogadores, pedido_cli.nome);
-                    continue;
+
+            // OPCAO - NOVO JOGADOR
+            if (strcmp(pedido_cli.comando, "novoNome") == 0) {
+                // VERIFICA SE CLIENTE (NOME) JA EXISTE
+                if (procura_jogador(jogadores, pedido_cli.nome) == 1)
                     break;
-                case 0:
-                    pedido_cli.fim = 0;
-                    strcpy(pedido_cli.comando, "invalido");
-                    break;
-                case 1:
-                    if (procura_jogador(jogadores, pedido_cli.nome) == 1)
-                        break;
-                    // atribuicao de jogo (aleatorio)
-                    int max_jogos = total_jogos(jogos);
-                    int random_number = rand() % max_jogos + 1;
-                    strcpy(pedido_cli.jogo, nome_jogo(jogos, random_number));
-                    pedido_cli.fim = 0;
-                    strcpy(pedido_cli.comando, "");
-                    jogadores = adiciona_jogador(jogadores, pedido_cli);
-                    break;
+
+                // ATRIBUI JOGO RANDOM
+                int random_number = rand() % total_jogos(jogos) + 1;
+                strcpy(pedido_cli.jogo, nome_jogo(jogos, random_number));
+
+                // TERMINA E LIMPA PEDIDO
+                pedido_cli.fim = 0;
+                strcpy(pedido_cli.comando, "");
+
+                // ADICIONA JOGADOR A LISTA
+                // CRIA THREAD E PIPE PARA JOGAR
+                //      cliente <-> thread (jogo)
+                jogadores = adiciona_jogador(jogadores, pedido_cli, &trinco);
+            } 
+
+            // OPCAO - JOGADOR A SAIR
+            else if (strcmp(pedido_cli.comando, "sair") == 0) {
+                desativa_jogador(jogadores, pedido_cli.nome);
+                continue;
+            } 
+
+            // OPCAO - PEDIDO INVALIDO
+            else {
+                pedido_cli.fim = 0;
+                strcpy(pedido_cli.comando, "invalido");
             }
+
+            // Enviar info ao cliente
             if (envio == sizeof(Comm_cli)) {
                 // interpretar
+                printf("[INFO] A devolver informacao ao cliente '%s'", pedido_cli.nome);
                 sprintf(fifo, FIFO_CLI, pedido_cli.pid);
                 fdr = open(fifo, O_WRONLY);
                 envio = write(fdr, &pedido_cli, sizeof(Comm_cli));
@@ -158,6 +161,7 @@ int main(int argc, char *argv[]) {
             }
         }
 	} while (1);
+    pthread_mutex_destroy(&trinco);
     close(fd);
 	unlink(FIFO_SRV);
 

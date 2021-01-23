@@ -44,6 +44,28 @@ void check_envVariables(char *gamedir, char *maxPlayers, int int_MAXPLAYERS) {
     }
 }
 
+void get_argumentos(int argc, char *argv[], int *tmp_Campeonato, int *tmp_Espera) {
+    char tmp_txt[250];
+    int opt;
+    while((opt = getopt(argc, argv, "t:e:")) != -1) {  
+        switch(opt) {   
+            case 't':
+                sprintf(tmp_txt, "tempo campeonato (opcao %c): %s\n", opt, optarg);
+                debug(tmp_txt, NULL, -1);
+                *tmp_Campeonato = atoi(optarg);
+                break;  
+            case 'e':
+                sprintf(tmp_txt, "tempo espera: %s\n", optarg);
+                debug(tmp_txt, NULL, -1);
+                *tmp_Espera = atoi(optarg);
+                break;
+            case '?':  
+                printf("Opcao desconhecida (%c): %c\n", opt, optopt); 
+                break;  
+        }  
+    }
+}
+
 void check_argumentos(int t_campeonato, int t_espera) {
     if (t_campeonato == 0 || t_espera == 0) {
         printf("[ERRO] Inicializacao incorreta. (./arbitro -t [tempo campeonato] -e [tempo espera])\n");
@@ -99,11 +121,13 @@ Jogos *obtem_jogos(char env_GAMEDIR[]) {
     struct dirent *dir;
     d = opendir(env_GAMEDIR);
     // char tempName[30];
+    // printf("A pesquisar jogos\n");
     if (d) {
         while ((dir = readdir(d)) != NULL) {
             // printf("%s\n", dir->d_name);
             if ((dir->d_name)[0] == 'g' && (dir->d_name)[1] == '_') {
                 if (total == 0) {
+                    // printf("[AVISO] Jogo encontrado: %s\n", dir->d_name);
                     strncpy(lista->nome, dir->d_name, sizeof(lista->nome));
                     lista->seg = NULL;
                     total++;
@@ -125,12 +149,29 @@ Jogos *obtem_jogos(char env_GAMEDIR[]) {
         }
         closedir(d);
     }
+    if (total == 0) printf("[AVISO] Nenhum jogo na diretoria %s\n", env_GAMEDIR);
     return tmp_lista;
+}
+
+void mostra_ajuda() {
+    printf("###### AJUDA ######\n");
+    printf("   > players\n");
+    printf("\tMostra jogadores inscritos com o arbitro.\n");
+    printf("   > games\n");
+    printf("\tMostra jogos disponiveis.\n");
+    printf("   > k[player]\n");
+    printf("\tRemove o jogador '[player]' do campeonato com aviso.\n");
+    printf(" X > s[player]\n");
+    printf("\tSuspende output entre o jogo e o jogador '[player]'.\n");
+    printf(" X > r[player]\n");
+    printf("\tSuspende output entre o jogo e o jogador '[player]'.\n");
+    printf("   > exit\n");
+    printf("\tEncerrar o arbitro.\n");
 }
 
 void lista_jogadores(Jogadores *lista) {
     if (lista == NULL) {
-        printf("\nNao ha jogadores ligados...\n");
+        printf("Nao ha jogadores ligados...\n");
         return;
     }
     Jogadores *temp = lista;
@@ -167,16 +208,66 @@ int procura_jogador(Jogadores *lista, char *nome) {
     return 0;
 }
 
-Jogadores *adiciona_jogador(Jogadores *lista, Comm_cli pedido) {
+void *executa_jogo(void *dados) {
+    pid_t pid = fork(); //fork process
+    TDATA *ponteiro_data = dados;
+    
+    printf("args: [1] %s [2] %d\n", ponteiro_data->jogo, ponteiro_data->pid);
+    char *game[2];
+    game[0] = (char *)malloc(sizeof(ponteiro_data->jogo)+3);
+    sprintf(game[0], "./%s", ponteiro_data->jogo);
+    
+    game[1] = NULL;
+    printf("@thread: jogo %s\n", game[0]);
+
+    if (pid == -1) { //error
+        char * error = strerror(errno);
+        printf("error fork!!\n");
+    } 
+    
+    else if (pid == 0) { // child process
+        execvp(game[0], game); //exec cmd
+        char * error = strerror(errno);
+        printf("unknown command\n");
+    } 
+    
+    else { // parent process
+        int childstatus;
+        printf("PID: %d\n", pid);
+        waitpid(pid, & childstatus, 0);
+        // return 1;
+    }
+   
+    int* res = (int *)malloc(sizeof(int));
+    *res = 123;
+    pthread_exit(res);
+};
+
+Jogadores *adiciona_jogador(Jogadores *lista, Comm_cli pedido, pthread_mutex_t *trinco) {
     if (lista == NULL) {
+        // INFO PARA ESTRUTURA JOGADORES
         Jogadores *novo = (Jogadores *) malloc(sizeof(Jogadores));
-        // printf("copia info a temp novo");
+
+        // COPIAR INFO CLIENTE
         novo->cli.pid = pedido.pid;
         strcpy(novo->cli.nome, pedido.nome);
         strcpy(novo->cli.jogo, pedido.jogo);
         novo->cli.pontuacao = pedido.pontuacao;
         strcpy(novo->cli.comando, pedido.comando);
         novo->cli.fim = pedido.fim;
+
+        // INFO PARA ESTRUTURA THREADS
+        pthread_t *novaThread = (pthread_t *) malloc(sizeof(pthread_t));
+        printf("[AVISO] A criar thread para cliente '%s'", pedido.nome);
+        TDATA thread_info;
+        strcpy(thread_info.jogo, novo->cli.jogo);
+        thread_info.pid = novo->cli.pid;
+        pthread_create(&novo->thread, NULL, (void*)executa_jogo, (void *)&thread_info);
+        novo->thread = *novaThread;
+
+        // CRIA PIPE PARA 
+
+        // COPIAR INFO GERAL
         novo->seg = NULL;
         printf("\n[AVISO] Jogador %s [%d] adicionado.\n", pedido.nome, pedido.pid);
 
@@ -236,15 +327,24 @@ Jogadores *remove_jogador(Jogadores *lista, char *nome) {
         if (strcmp(temp_comm->nome, nome) == 0) {
             kill(temp_comm->pid, SIGUSR1);
             if (antes == NULL) {
+                // remover thread
+                pthread_join(lista->thread, NULL);
+
+                // remover jogador
                 lista = temp->seg;
                 printf("\n[AVISO] Jogador %s [%d] removido.\n", temp_comm->nome, temp_comm->pid);
                 free(temp);
                 removido = 1;
                 break;
+            } else {
+                // remover thread
+                pthread_join(temp->thread, NULL);
+
+                // remover jogador
+                antes->seg = temp->seg;
+                printf("\n[AVISO] Jogador %s [%d] removido.\n", temp_comm->nome, temp_comm->pid);
+                free(temp);
             }
-            antes->seg = temp->seg;
-            printf("\n[AVISO] Jogador %s [%d] removido.\n", temp_comm->nome, temp_comm->pid);
-            free(temp);
             removido = 1;
             break;
         }
@@ -270,7 +370,7 @@ int processa_pedido(Comm_cli *pedido, int size) {
 
 void termina_jogos(Jogadores *lista) {
     if (lista == NULL) {
-        printf("Nao ha jogadores ligados... A encerrar normalmente...\n");
+        printf("[INFO] Nao ha jogadores ligados...\n[INFO] A encerrar normalmente...\n");
         return;
     }
     Jogadores *temp = lista;
@@ -280,8 +380,8 @@ void termina_jogos(Jogadores *lista) {
         temp_comm = &temp->cli;
         if (temp_comm->fim == 0) {
             kill(temp_comm->pid, SIGINT);
-            printf("\tUser %s [%d] foi desligado.\n", temp_comm->nome, temp_comm->pid); 
-        } else printf("\tUser %s [%d] já estava desligado.\n", temp_comm->nome, temp_comm->pid); 
+            printf("\t[* INFO] User %s [%d] foi desligado.\n", temp_comm->nome, temp_comm->pid); 
+        } else printf("\t[* INFO] User %s [%d] já estava desligado.\n", temp_comm->nome, temp_comm->pid); 
         temp = temp->seg;
         if (temp == NULL) break;
     } while(1);

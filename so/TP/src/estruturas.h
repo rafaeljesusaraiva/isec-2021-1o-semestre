@@ -19,6 +19,7 @@ typedef struct {
 
 typedef struct jogad {
     Comm_cli cli;
+    pthread_t thread;
     struct jogad *seg;
 } Jogadores;
 
@@ -26,6 +27,12 @@ typedef struct jogos {
     char nome[1024];
     struct jogos *seg;
 } Jogos;
+
+typedef struct thread_data {
+    char jogo[30];
+    int pid;
+} TDATA;
+
 // struct estruturas {
 //     /* data */
 // };
