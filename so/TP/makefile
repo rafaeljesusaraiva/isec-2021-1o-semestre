@@ -6,7 +6,7 @@ OBJDIR = dist/objdir
 # Diretoria dos ficheiros fonte
 SRCDIR = src
 # Variáveis para debug
-# FLAGS=-D DEBUG
+FLAGS=-D DEBUG
 
 # ECHO CORES
 E_RED = '\033[0;31m'

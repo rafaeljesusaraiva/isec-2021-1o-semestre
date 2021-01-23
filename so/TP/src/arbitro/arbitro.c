@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     fd = open(FIFO_SRV, O_RDWR);
 
-    sprintf(tmp_txt, "FIFO aberto '%s'\n", FIFO_SRV);
+    sprintf(tmp_txt, "FIFO aberto '%s'", FIFO_SRV);
     debug(tmp_txt, NULL, -1);
 
 /*****************************************/
@@ -101,6 +101,13 @@ int main(int argc, char *argv[]) {
                 char *tmp_name = cmd_t;
                 tmp_name++;     // remove K
                 jogadores = remove_jogador(jogadores, tmp_name);
+            }else if(cmd_t[0] == 's'){
+                // ex: srui ---> suspende stdout jogo rui 
+                
+            }
+            else if(cmd_t[0] == 'r'){
+                // ex: srui ---> resume stdout jogo rui 
+                
             } else {
                 printf("Comando desconhecido, tente novamente. \n");
             }
@@ -115,25 +122,42 @@ int main(int argc, char *argv[]) {
             debug("Recebi isto", &pedido_cli, envio);
 
             // PROCESSA O PEDIDO DO CLIENTE
+            sprintf(tmp_txt, "Processa pedido");
+            debug(tmp_txt, NULL, -1);
             int accao = processa_pedido(&pedido_cli, envio);
 
             // OPCAO - NOVO JOGADOR
             if (strcmp(pedido_cli.comando, "novoNome") == 0) {
+                sprintf(tmp_txt, "Nova inscricao");
+                debug(tmp_txt, NULL, -1);
+                
+                sprintf(tmp_txt, "A procurar se jogador ja existe");
+                debug(tmp_txt, NULL, -1);
                 // VERIFICA SE CLIENTE (NOME) JA EXISTE
                 if (procura_jogador(jogadores, pedido_cli.nome) == 1)
                     break;
+
+                sprintf(tmp_txt, "Jogador novo!");
+                debug(tmp_txt, NULL, -1);
 
                 // ATRIBUI JOGO RANDOM
                 int random_number = rand() % total_jogos(jogos) + 1;
                 strcpy(pedido_cli.jogo, nome_jogo(jogos, random_number));
 
+                sprintf(tmp_txt, "Jogo aleatorio obtido (%s)", pedido_cli.jogo);
+                debug(tmp_txt, NULL, -1);
+
                 // TERMINA E LIMPA PEDIDO
+                sprintf(tmp_txt, "Limpeza de pedido");
+                debug(tmp_txt, NULL, -1);
                 pedido_cli.fim = 0;
                 strcpy(pedido_cli.comando, "");
 
                 // ADICIONA JOGADOR A LISTA
                 // CRIA THREAD E PIPE PARA JOGAR
                 //      cliente <-> thread (jogo)
+                sprintf(tmp_txt, "A adicionar jogador e criar thread+fifo apropriados.");
+                debug(tmp_txt, NULL, -1);
                 jogadores = adiciona_jogador(jogadores, pedido_cli, &trinco);
             } 
 

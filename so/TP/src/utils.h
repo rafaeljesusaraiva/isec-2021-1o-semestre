@@ -14,7 +14,8 @@
 #define FIFO_CLI "cli%d"
 
 // PIPE Cliente <-> Thread
-#define FIFO_THR "thr%d"
+#define FIFO_THR_IN "thr%d_in"      // STDOUT
+#define FIFO_THR_OUT "thr%d_out"    // STDIN
 
 #endif // UTILS_H
 

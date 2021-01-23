@@ -50,17 +50,17 @@ void get_argumentos(int argc, char *argv[], int *tmp_Campeonato, int *tmp_Espera
     while((opt = getopt(argc, argv, "t:e:")) != -1) {  
         switch(opt) {   
             case 't':
-                sprintf(tmp_txt, "tempo campeonato (opcao %c): %s\n", opt, optarg);
+                sprintf(tmp_txt, "tempo campeonato (opcao %c): %s", opt, optarg);
                 debug(tmp_txt, NULL, -1);
                 *tmp_Campeonato = atoi(optarg);
                 break;  
             case 'e':
-                sprintf(tmp_txt, "tempo espera: %s\n", optarg);
+                sprintf(tmp_txt, "tempo espera: %s", optarg);
                 debug(tmp_txt, NULL, -1);
                 *tmp_Espera = atoi(optarg);
                 break;
             case '?':  
-                printf("Opcao desconhecida (%c): %c\n", opt, optopt); 
+                printf("Opcao desconhecida (%c): %c", opt, optopt); 
                 break;  
         }  
     }
@@ -78,7 +78,7 @@ int total_jogos(Jogos *lista) {
     int total = 0;
     while (lista != NULL) {
         total++;
-        lista = tmp_lista->seg;
+        lista = lista->seg;
     }
     lista = tmp_lista;
     return total;
@@ -89,7 +89,7 @@ void lista_jogos(Jogos *lista) {
     printf("Lista Jogos:\n");
     while (lista != NULL) {
         printf("  > %s \n", lista->nome);
-        lista = tmp_lista->seg;
+        lista = lista->seg;
     }
     lista = tmp_lista;
 }
@@ -109,6 +109,7 @@ char *nome_jogo(Jogos *lista, int num) {
 
 Jogos *obtem_jogos(char env_GAMEDIR[]) {
     Jogos *lista, *tmp_lista, *novo;
+    char tmp_txt[250];
     lista = (Jogos *) malloc(sizeof(Jogos));
     if (lista == NULL) { // nao alocou
         printf("[ERRO] Alocacao de memoria inicial falhou\n");
@@ -120,18 +121,21 @@ Jogos *obtem_jogos(char env_GAMEDIR[]) {
     DIR *d;
     struct dirent *dir;
     d = opendir(env_GAMEDIR);
-    // char tempName[30];
-    // printf("A pesquisar jogos\n");
+
+    debug("A pesquisar jogos...", NULL, -1);
+    
     if (d) {
         while ((dir = readdir(d)) != NULL) {
-            // printf("%s\n", dir->d_name);
+            sprintf(tmp_txt, "[OBTEM_JOGOS] > '%s'", dir->d_name);
+            debug(tmp_txt, NULL, -1);
             if ((dir->d_name)[0] == 'g' && (dir->d_name)[1] == '_') {
                 if (total == 0) {
-                    // printf("[AVISO] Jogo encontrado: %s\n", dir->d_name);
+                    printf("[AVISO] Jogo encontrado: %s\n", dir->d_name);
                     strncpy(lista->nome, dir->d_name, sizeof(lista->nome));
                     lista->seg = NULL;
                     total++;
                 } else {
+                    printf("[AVISO] Jogo encontrado: %s\n", dir->d_name);
                     novo = (Jogos *) malloc(sizeof(Jogos));
                     if (novo == NULL) { // nao alocou
                         printf("[ERRO] Alocacao de memoria falhou para %s\n", dir->d_name);
@@ -139,11 +143,11 @@ Jogos *obtem_jogos(char env_GAMEDIR[]) {
                         return tmp_lista;
                     }
                     strncpy(novo->nome, dir->d_name, sizeof(novo->nome));
+                    novo->seg = NULL;
                     total++;
 
                     lista->seg = novo;
                     lista = lista->seg;
-                    lista->seg = NULL;
                 }
             }
         }
@@ -164,7 +168,7 @@ void mostra_ajuda() {
     printf(" X > s[player]\n");
     printf("\tSuspende output entre o jogo e o jogador '[player]'.\n");
     printf(" X > r[player]\n");
-    printf("\tSuspende output entre o jogo e o jogador '[player]'.\n");
+    printf("\tResume output entre o jogo e o jogador '[player]'.\n");
     printf("   > exit\n");
     printf("\tEncerrar o arbitro.\n");
 }
@@ -210,34 +214,59 @@ int procura_jogador(Jogadores *lista, char *nome) {
 
 void *executa_jogo(void *dados) {
     pid_t pid = fork(); //fork process
-    TDATA *ponteiro_data = dados;
+    TDATA *arg = dados;
+    TDATA *ponteiro = (TDATA *)malloc(sizeof(TDATA));
+    ponteiro->jogo = arg->jogo;
+    ponteiro->pid = arg->pid;
     
-    printf("args: [1] %s [2] %d\n", ponteiro_data->jogo, ponteiro_data->pid);
+    printf("args: [0] %s [1] %d\n", ponteiro->jogo, ponteiro->pid);
     char *game[2];
-    game[0] = (char *)malloc(sizeof(ponteiro_data->jogo)+3);
-    sprintf(game[0], "./%s", ponteiro_data->jogo);
+    game[0] = (char *)malloc(sizeof(ponteiro->jogo)+3);
+    sprintf(game[0], "./%s", ponteiro->jogo);
     
     game[1] = NULL;
     printf("@thread: jogo %s\n", game[0]);
 
+    // CRIAR PIPES THREAD<->CLIENTE
+    char fifo_out[90], fifo_in[90];
+    sprintf(fifo_out, FIFO_THR_OUT, ponteiro->pid);
+    sprintf(fifo_in, FIFO_THR_IN, ponteiro->pid);
+    mkfifo(fifo_out, 0777);
+    mkfifo(fifo_in, 0777);
     if (pid == -1) { //error
         char * error = strerror(errno);
         printf("error fork!!\n");
     } 
     
     else if (pid == 0) { // child process
+        
+        close(STDOUT_FILENO);
+        close(STDIN_FILENO);
+
+        int pipe_out = open( fifo_out, O_WRONLY );
+        dup2( pipe_out, STDOUT_FILENO); // Attach stdout to the FIFO
+
+        int pipe_in = open( fifo_in, O_RDONLY );
+        dup2( pipe_in, STDIN_FILENO); // Attach stdin to the FIFO
+
+        close(pipe_out);
+        close(pipe_in);
+
         execvp(game[0], game); //exec cmd
         char * error = strerror(errno);
         printf("unknown command\n");
     } 
     
     else { // parent process
+        // wait( NULL ); // Wait for child to write to the FIFO
         int childstatus;
         printf("PID: %d\n", pid);
         waitpid(pid, & childstatus, 0);
+        char fifo_out[90], fifo_in[90];
+
+        
         // return 1;
     }
-   
     int* res = (int *)malloc(sizeof(int));
     *res = 123;
     pthread_exit(res);
@@ -258,16 +287,17 @@ Jogadores *adiciona_jogador(Jogadores *lista, Comm_cli pedido, pthread_mutex_t *
 
         // INFO PARA ESTRUTURA THREADS
         pthread_t *novaThread = (pthread_t *) malloc(sizeof(pthread_t));
-        printf("[AVISO] A criar thread para cliente '%s'", pedido.nome);
-        TDATA thread_info;
-        strcpy(thread_info.jogo, novo->cli.jogo);
-        thread_info.pid = novo->cli.pid;
-        pthread_create(&novo->thread, NULL, (void*)executa_jogo, (void *)&thread_info);
-        novo->thread = *novaThread;
+        printf("[AVISO] A criar thread para cliente '%s'\n", pedido.nome);
 
-        // CRIA PIPE PARA 
+        TDATA *thread_info = (TDATA *) malloc(sizeof(TDATA));
+        thread_info->jogo = novo->cli.jogo;
+        thread_info->pid = novo->cli.pid;
+        printf("A enviar para thread: [0] %s [1] %d\n", thread_info->jogo, thread_info->pid);
+        pthread_create(&novo->thread, NULL, (void*)executa_jogo, (void *)thread_info);
 
         // COPIAR INFO GERAL
+        novo->thread = *novaThread;
+        novo->thread_info = *thread_info;
         novo->seg = NULL;
         printf("\n[AVISO] Jogador %s [%d] adicionado.\n", pedido.nome, pedido.pid);
 
@@ -329,7 +359,7 @@ Jogadores *remove_jogador(Jogadores *lista, char *nome) {
             if (antes == NULL) {
                 // remover thread
                 pthread_join(lista->thread, NULL);
-
+                
                 // remover jogador
                 lista = temp->seg;
                 printf("\n[AVISO] Jogador %s [%d] removido.\n", temp_comm->nome, temp_comm->pid);
@@ -378,7 +408,15 @@ void termina_jogos(Jogadores *lista) {
     printf("A desligar users...\n");
     do {
         temp_comm = &temp->cli;
-        if (temp_comm->fim == 0) {
+        // fecha fifo thread
+        char fifo_out[90], fifo_in[90];
+        sprintf(fifo_out, FIFO_THR_OUT, temp_comm->pid);
+        sprintf(fifo_in, FIFO_THR_IN, temp_comm->pid);
+        unlink(fifo_out);
+        unlink(fifo_in);
+        printf("\t[* INFO] Fifo da thread do user %s [%d] foi fechado.\n", temp_comm->nome, temp_comm->pid);
+        if (temp_comm->fim == 0) { 
+            // termina cliente
             kill(temp_comm->pid, SIGINT);
             printf("\t[* INFO] User %s [%d] foi desligado.\n", temp_comm->nome, temp_comm->pid); 
         } else printf("\t[* INFO] User %s [%d] já estava desligado.\n", temp_comm->nome, temp_comm->pid); 

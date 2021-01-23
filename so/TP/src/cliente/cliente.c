@@ -92,45 +92,93 @@ int main() {
 #endif
     } while(pedido_cli.fim == -1);
 
+    // Preparacao dos pipes
+    char fifo_out[90], fifo_in[90];
+    sprintf(fifo_out, FIFO_THR_OUT, pedido_cli.pid);
+    sprintf(fifo_in, FIFO_THR_IN, pedido_cli.pid);
+    int pipe_out = open( fifo_out, O_RDONLY );  // obtem output do jogo
+    int pipe_in = open( fifo_in, O_WRONLY );    // envia input p/ jogo
+    int res, fd_t;
+    char *outputJogo;
+    fd_set fds;
+    struct timeval tempo;
+
+/*****************************************/
+    // ^^^ - Inicialização do cliente
+    // vvv - Funcionamento do cliente
+/*****************************************/
+
     do { 
         // Imprimir info do jogo
         pontuacao = pedido_cli.pontuacao;
 
         // scanf
-        printf("COMANDO: ");
+        printf("\nCOMANDO: ");
         fflush(stdout);
-        scanf("%s", comando_t);
 
-        if (strcmp("#mygame", comando_t) == 0) {
-            printf("JOGO ATUAL: %s\n", pedido_cli.jogo);
-        } else {
-            // decide
-            if (strcmp("#quit", comando_t) == 0) {
-                // desiste campeonato
-                pedido_cli.fim = 1;
-                strcpy(pedido_cli.comando, "sair");
+        FD_ZERO(&fds);
+        //Toma atençao ao teclado->0
+        FD_SET(0, &fds);
+        //toma atençao ao pipe do jogo
+        FD_SET(pipe_out, &fds);
+        tempo.tv_sec = 10;
+        tempo.tv_usec = 0;
+
+        res = select(fd+1, &fds, NULL, NULL, &tempo);
+
+        if (res > 0 && FD_ISSET(0, &fds)) {
+            scanf("%s", comando_t);
+
+            // CASO SEJA COMANDO
+            if (comando_t[0] == '#') {
+                if (strcmp("#mygame", comando_t) == 0)
+                    printf("JOGO ATUAL: %s\n", pedido_cli.jogo);
+
+                else if (strcmp("#quit", comando_t) == 0) {
+                    // desiste campeonato
+                    pedido_cli.fim = 1;
+                    strcpy(pedido_cli.comando, "sair");
+                    envio = write(fd, &pedido_cli, sizeof(Comm_cli));
+                    break;
+                }
+
+                else {
+                    printf("Comando Invalido..\n");
+                    continue;
+                }
+
+                // manda
                 envio = write(fd, &pedido_cli, sizeof(Comm_cli));
-                break;
+                #ifdef DEBUG
+                    print_commcli(&pedido_cli, envio);
+                #endif
+                // recebe feedback arbitro
+                fdr = open(fifo, O_RDONLY);
+                envio = read(fdr, &pedido_cli, sizeof(Comm_cli));
+                close(fdr);
+                #ifdef DEBUG
+                    print_commcli(&pedido_cli, envio);
+                #endif
             } else {
-                strcpy(pedido_cli.comando, comando_t);
+                // CASO SEJA INPUT P/ JOGO
+                #ifdef DEBUG
+                    printf("Input nao local (nao comeca por #)\n");
+                    printf("A enviar para o fifo\n");
+                #endif
+                envio = write(pipe_in, comando_t, sizeof(comando_t));
+                printf("nbytes escritos %d", envio);
             }
-            // manda
-            envio = write(fd, &pedido_cli, sizeof(Comm_cli));
-#ifdef DEBUG
-            print_commcli(&pedido_cli, envio);
-#endif
-            // recebe feedback arbitro
-            fdr = open(fifo, O_RDONLY);
-            envio = read(fdr, &pedido_cli, sizeof(Comm_cli));
-            close(fdr);
-#ifdef DEBUG
-            print_commcli(&pedido_cli, envio);
-#endif
-            if (strcmp(pedido_cli.comando, "encerra") == 0)
-                pedido_cli.fim = 1;
         }
+
+        else if (res > 0 && FD_ISSET(fd, &fds)) {
+            envio = read(pipe_out, outputJogo, 100);
+                if (envio > 0)
+                    printf("%s\n", outputJogo);
+        }
+
     } while (pedido_cli.fim != 1);
 
+    close(pipe_in);
     // close(fd);
     unlink(fifo);
     return pontuacao;
