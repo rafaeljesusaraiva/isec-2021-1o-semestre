@@ -21,6 +21,17 @@ int main() {
 
     signal(SIGUSR1, sair); //   Quando o sinal for detetado executa ...
 
+    printf("   ____     _   _                                ");
+    printf("  / __ \\   | \\ | |                               ");
+    printf(" | |  | |  |  \\| |_   _ _ __ ___   ___ _ __ ___  ");
+    printf(" | |  | |  | . ` | | | | '_ ` _ \\ / _ \\ '__/ _ \\ ");
+    printf(" | |__| |  | |\\  | |_| | | | | | |  __/ | | (_) |");
+    printf("  \\____/   |_| \\_|\\__,_|_| |_| |_|\\___|_|  \\___/ ");
+    printf("                                                 ");
+
+    printf("\n\n\tBem vindo ao jogo, O NUMERO");
+    printf("\n\n\tEste jogo consiste em adivinhar a maior quantidade de numeros possiveis, para consequentemente, ganhar mais pontos.\n");
+
     do {
         // Numero aleatório com limites [lower, upper] (expressão)
         // num = (rand() % (upper - lower + 1)) + lower; 
