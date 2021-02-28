@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>ISEC @ Zoom</title>
+    <link rel="stylesheet" href="dist/bootstrap.min.css">
+    <link rel="stylesheet" href="dist/styles.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand mb-0 h1">
+            <img src="img/logo-isec-transparente.png" height="30" alt="" loading="lazy">
+            Links Zoom
+        </a>
+    </nav>
+    <div class="container-fluid my-3">
+        <div id="accordion">
+            <div class="card bg-dark">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#segundaFeira"
+                            aria-expanded="true" aria-controls="segundaFeira">
+                            Segunda-Feira
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="segundaFeira" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                </div>
+            </div>
+            <div class="card text-white bg-dark">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#tercaFeira"
+                            aria-expanded="false" aria-controls="tercaFeira">
+                            Terça-Feira
+                        </button>
+                    </h5>
+                </div>
+                <div id="tercaFeira" class="collapse" aria-labelledby="tercaFeira" data-parent="#accordion">
+                </div>
+            </div>
+            <div class="card text-white bg-dark">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#quartaFeira"
+                            aria-expanded="false" aria-controls="quartaFeira">
+                            Quarta-Feira
+                        </button>
+                    </h5>
+                </div>
+                <div id="quartaFeira" class="collapse" aria-labelledby="quartaFeira" data-parent="#accordion">
+                </div>
+            </div>
+            <div class="card text-white bg-dark">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#quintaFeira"
+                            aria-expanded="false" aria-controls="quintaFeira">
+                            Quinta-Feira
+                        </button>
+                    </h5>
+                </div>
+                <div id="quintaFeira" class="collapse" aria-labelledby="quintaFeira" data-parent="#accordion">
+                </div>
+            </div>
+            <div class="card text-white bg-dark">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#sextaFeira"
+                            aria-expanded="false" aria-controls="sextaFeira">
+                            Sexta-Feira
+                        </button>
+                    </h5>
+                </div>
+                <div id="sextaFeira" class="collapse" aria-labelledby="sextaFeira" data-parent="#accordion">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="dist/jquery.js"></script>
+    <script src="dist/bootstrap.bundle.min.js"></script>
+    <script id="jsonFile" type="application/json">
+        {"Segunda-Feira":{"SDT1":{"Nome":"Sistemas Digitais","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/87269829899?pwd=ZUEzaXpWTmpiTlk0MW02bTQ5Szhjdz09","Password":null,"Horario":{"Inicio":"8h30","Fim":"9h30"}},"AM1TP5":{"Nome":"Análise Matemática 1","Tipo":"TP5","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/82150516771?pwd=ZjloWW1hMEU1bHRkTnZhZ3p1ditzQT09","Password":"531675","Horario":{"Inicio":"9h30","Fim":"11h30"}},"AM1P5":{"Nome":"Análise Matemática 1","Tipo":"P5","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/88026912149?pwd=MDdOeTh0M1hkdkdMeEppWjUrVitrdz09","Password":"051698","Horario":{"Inicio":"11h30","Fim":"12h30"}},"IOT1":{"Nome":"Investigação Operacional","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/88016173611","Password":null,"Horario":{"Inicio":"15h30","Fim":"16h30"}},"IOTP2":{"Nome":"Investigação Operacional","Tipo":"TP2","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/89521467490","Password":null,"Horario":{"Inicio":"16h30","Fim":"17h30"}},"IRCT1":{"Nome":"Introdução a Redes de Comunicação","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/89926229974","Password":null,"Horario":{"Inicio":"17h30","Fim":"19h30"}}},"Terça-Feira":{"POOP3":{"Nome":"Programação Orientada a Objetos","Tipo":"P3","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/89660521775","Password":null,"Horario":{"Inicio":"8h30","Fim":"10h30"}},"SOP2":{"Nome":"Sistemas Operativos","Tipo":"P2","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/89373245495","Password":"855605","Horario":{"Inicio":"10h30","Fim":"12h30"}},"IRCP2":{"Nome":"Introdução a Redes de Comunicação","Tipo":"P2","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/83912390536?pwd=MXdGME5KY2NtcENFc2JOTWJicUc0QT09","Password":null,"Horario":{"Inicio":"13h30","Fim":"15h30"}},"IOP1":{"Nome":"Investigação Operacional","Tipo":"P1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/85777549568","Password":null,"Horario":{"Inicio":"15h30","Fim":"17h30"}},"SDP5":{"Nome":"Sistemas Digitais","Tipo":"P5","Sala":"Zoom","Registo":"https://videoconf-colibri.zoom.us/meeting/register/tZwtduCsqT4sGdfwWajQH0ItKkIBNWfeuzn1","Link":"https://videoconf-colibri.zoom.us/w/88019475633?tk=fsxfKJnVifdquY-_54sRgbBQAAag0PKoFzmRuvBx4_w.DQIAAAAUfl6csRZ2Z2VGT2IwSFNDT0hoT3FhSF91QzdnAAAAAAAAAAAAAAAAAAAAAAAAAAAA","Password":null,"Horario":{"Inicio":"17h30","Fim":"19h30"}}},"Quarta-Feira":{"AM1T1":{"Nome":"Análise Matemática 1","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/83743367338?pwd=UzJDeGRpM1ZOb2xVR2dnVlY3L3Vidz09","Password":"409409","Horario":{"Inicio":"8h30","Fim":"10h30"}},"SDT1":{"Nome":"Sistemas Digitais","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/87269829899?pwd=ZUEzaXpWTmpiTlk0MW02bTQ5Szhjdz09","Password":null,"Horario":{"Inicio":"10h30","Fim":"11h30"}},"ALTP3":{"Nome":"Álgebra Linear","Tipo":"TP3","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/81341422930","Password":"490826","Horario":{"Inicio":"17h30","Fim":"19h30"}}},"Quinta-Feira":{"SOT1":{"Nome":"Sistemas Operativos","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/88402506892","Password":null,"Horario":{"Inicio":"9h30","Fim":"11h30"}},"POOP3":{"Nome":"Programação Orientada a Objetos","Tipo":"P3","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/89660521775","Password":null,"Horario":{"Inicio":"16h30","Fim":"18h30"}}},"Sexta-Feira":{"ALT1":{"Nome":"Álgebra Linear","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/87272899122","Password":null,"Horario":{"Inicio":"9h30","Fim":"11h30"}},"IOT1":{"Nome":"Investigação Operacional","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/88016173611","Password":null,"Horario":{"Inicio":"14h30","Fim":"15h30"}},"POOT1":{"Nome":"Programação Orientada a Objetos","Tipo":"T1","Sala":"Zoom","Registo":null,"Link":"https://videoconf-colibri.zoom.us/j/88082730162","Password":null,"Horario":{"Inicio":"17h30","Fim":"18h30"}}}}
+    </script>
+    <script src="dist/app.js"></script>
+</body>
+
+</html>
